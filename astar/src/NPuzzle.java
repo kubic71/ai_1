@@ -54,6 +54,34 @@ class PuzzleState {
 		this(size, squares, findEmpty(squares));
 	}
 	
+	// Construct a puzzle where all the tiles are in reverse order.
+	public static PuzzleState reversed(int size) {
+		int[] a = new int[size * size];
+		
+		for (int i = 0 ; i < size * size ; ++i)
+			a[i] = size * size - 1 - i;
+		
+		return new PuzzleState(size, a);
+	}
+
+	// Construct a puzzle by making a number of random moves from the goal state.
+	public static PuzzleState random(int size, int num) {
+		Random rand = new Random();
+		
+		int[] a = new int[size * size];
+		for (int i = 0 ; i < size * size ; ++i)
+			a[i] = i;
+		PuzzleState state = new PuzzleState(size, a);
+		
+		for (int i = 1 ; i <= num ; ++i) {
+			List<Dir> l = state.possibleDirections();
+			int which = rand.nextInt(l.size());
+			state = state.slide(l.get(which));
+		}
+
+		return state;
+	}	
+
 	@Override
 	public boolean equals(Object o) {
 		if (o instanceof PuzzleState) {
@@ -126,35 +154,11 @@ class PuzzleState {
 
 class NPuzzle implements HeuristicProblem<PuzzleState, Dir> {
 	PuzzleState initial;
-	
-	// Construct a puzzle where all the tiles are in reverse order.
-	public NPuzzle(int size) {
-		int[] a = new int[size * size];
-		
-		for (int i = 0 ; i < size * size ; ++i)
-			a[i] = size * size - 1 - i;
-		
-		initial = new PuzzleState(size, a);
-	}
-	
-	// Construct a puzzle by making _moves_ random moves from the goal state.
-	public NPuzzle(int size, int moves) {
-		Random rand = new Random();
-		
-		int[] a = new int[size * size];
-		for (int i = 0 ; i < size * size ; ++i)
-			a[i] = i;
-		PuzzleState state = new PuzzleState(size, a);
-		
-		for (int i = 1 ; i <= moves ; ++i) {
-			List<Dir> l = state.possibleDirections();
-			int which = rand.nextInt(l.size());
-			state = state.slide(l.get(which));
-		}
 
-		initial = new PuzzleState(size, a);
-	}
-	
+	public NPuzzle(PuzzleState initial) { this.initial = initial; }
+
+	public NPuzzle(int i) { this(PuzzleState.reversed(i)); }
+
 	public PuzzleState initialState() {
 		return initial;
 	}
@@ -179,12 +183,48 @@ class NPuzzle implements HeuristicProblem<PuzzleState, Dir> {
 	}
 
 	public int estimate(PuzzleState state) {
-		// Compute the sum of the Manhattan distances of tiles from their goal positions.
+		// Compute the sum of the taxicab distances of tiles from their goal positions.
 		int sum = 0;
 		for (int i = 0 ; i < state.size * state.size ; ++i)
 			if (state.squares[i] > 0)
 				sum += dist(state.size, state.squares[i], i);
 		return sum;
 	}
-	
+
+  	public static void test(PuzzleState ps) {
+		NPuzzle np = new NPuzzle(ps);
+		Solution<PuzzleState, Dir> s = AStar.search(np);
+		if (s != null)
+			System.out.format("total cost is %.1f\n", s.pathCost);
+		else
+			System.out.println("no solution found");
+}
+
+	public static void test() {
+		// shortest solution = 46 steps
+		// A* with the taxicab heuristic will explore about 600,000 states
+		int[] puzzle = {
+			2, 11, 14,  3,
+			8,  6,  7, 13,
+			0,  5,  4, 15,
+			1,  9, 10, 12
+		};
+
+		// shortest solution = 44 steps
+		// A* with the taxicab heuristic will explore about 1,400,000 states 
+		int[] puzzle2 = {
+			12, 9, 6, 2, 
+			10, 5, 4, 3, 
+			1,  8, 11, 14, 
+			7,  0, 13, 15
+		};
+
+		int[][] puzzles = { puzzle, puzzle2 };
+
+		for (int[] p : puzzles) {
+			PuzzleState ps = new PuzzleState(4, p);
+			System.out.println(ps);
+			test(ps);
+		}
+	}
 }

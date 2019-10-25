@@ -88,4 +88,12 @@ public class Cube implements HeuristicProblem<Pos, Integer> {
         return 1000 * state.x;
     }
 
+	public static void test() {
+		Cube c = new Cube();
+		Solution<Pos, Integer> s = AStar.search(c);
+		if (s != null)
+			System.out.format("total cost is %.1f\n", s.pathCost);
+		else
+			System.out.println("no solution found");
+	}
 }
