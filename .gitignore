@@ -1,2 +1,6 @@
+.settings
 .vscode
+astar/.classpath
+astar/.project
 bin
+target
