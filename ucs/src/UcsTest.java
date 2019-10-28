@@ -1,4 +1,4 @@
-class Test {
+class UcsTest {
   public static void main(String[] args) {
     System.out.println("== Empty ==");
     Empty.test();

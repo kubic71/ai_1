@@ -1,4 +1,4 @@
-class Test {
+class AStarTest {
   static <S, A> void runTest(HeuristicProblem<S, A> prob) {
 		Solution<S, A> solution = AStar.search(prob);
 		Solution.report(solution, prob);
