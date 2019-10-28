@@ -8,4 +8,26 @@ class Solution<S, A> {
   public Solution(List<A> actions, S goalState, double pathCost) {
     this.actions = actions; this.goalState = goalState; this.pathCost = pathCost;
   }
+
+  // Return true if this is a valid solution to the given problem.
+  public boolean isValid(HeuristicProblem<S, A> prob) {
+    // Check that the actions actually lead from the problem's initial state to the goal.
+    S state = prob.initialState();
+    for (A action : actions)
+      state = prob.result(state, action);
+    
+    return state.equals(goalState) && prob.isGoal(goalState);
+  }
+
+  // Describe a solution.
+  static <S, A> void report(Solution<S, A> solution, HeuristicProblem<S, A> prob) {
+    if (solution == null)
+      System.out.println("no solution found");
+    else if (!solution.isValid(prob))
+      System.out.println("solution is invalid!");
+    else {
+      System.out.println("solution is valid");
+      System.out.format("total cost is %.1f\n", solution.pathCost);
+    }
+  }
 }

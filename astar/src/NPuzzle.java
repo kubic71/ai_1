@@ -190,41 +190,4 @@ class NPuzzle implements HeuristicProblem<PuzzleState, Dir> {
 				sum += dist(state.size, state.squares[i], i);
 		return sum;
 	}
-
-  	public static void test(PuzzleState ps) {
-		NPuzzle np = new NPuzzle(ps);
-		Solution<PuzzleState, Dir> s = AStar.search(np);
-		if (s != null)
-			System.out.format("total cost is %.1f\n", s.pathCost);
-		else
-			System.out.println("no solution found");
-}
-
-	public static void test() {
-		// shortest solution = 46 steps
-		// A* with the taxicab heuristic will explore about 600,000 states
-		int[] puzzle = {
-			2, 11, 14,  3,
-			8,  6,  7, 13,
-			0,  5,  4, 15,
-			1,  9, 10, 12
-		};
-
-		// shortest solution = 44 steps
-		// A* with the taxicab heuristic will explore about 1,400,000 states 
-		int[] puzzle2 = {
-			12, 9, 6, 2, 
-			10, 5, 4, 3, 
-			1,  8, 11, 14, 
-			7,  0, 13, 15
-		};
-
-		int[][] puzzles = { puzzle, puzzle2 };
-
-		for (int[] p : puzzles) {
-			PuzzleState ps = new PuzzleState(4, p);
-			System.out.println(ps);
-			test(ps);
-		}
-	}
 }
