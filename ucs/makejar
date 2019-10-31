@@ -1,0 +1,7 @@
+#!/bin/bash
+
+jar cf ucs_tmp.jar -C target/classes .
+
+zip -d ucs_tmp.jar Ucs.class UcsTest.class
+
+mv -f ucs_tmp.jar ucs.jar
