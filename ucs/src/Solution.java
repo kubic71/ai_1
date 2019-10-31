@@ -11,12 +11,16 @@ class Solution<S, A> {
 
   // Return true if this is a valid solution to the given problem.
   public boolean isValid(Problem<S, A> prob) {
-    // Check that the actions actually lead from the problem's initial state to the goal.
     S state = prob.initialState();
-    for (A action : actions)
+    double cost = 0.0;
+
+    // Check that the actions actually lead from the problem's initial state to the goal.
+    for (A action : actions) {
       state = prob.result(state, action);
+      cost += prob.cost(state, action);
+    }
     
-    return state.equals(goalState) && prob.isGoal(goalState);
+    return state.equals(goalState) && prob.isGoal(goalState) && pathCost == cost;
   }
 
   // Describe a solution.

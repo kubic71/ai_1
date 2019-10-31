@@ -16,19 +16,19 @@ import java.util.*;
 // millions of positions before finding the goal. With the right heuristic,
 // A* will find the goal immediately, expanding exactly 3000 nodes.
 
-class Pos {
+class CPos {
     int x, y, z;
 
-    Pos(int x, int y, int z) {
+    CPos(int x, int y, int z) {
         this.x = x; this.y = y; this.z = z;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Pos))
+        if (!(o instanceof CPos))
             return false;
 
-        Pos q = (Pos) o;
+        CPos q = (CPos) o;
         return x == q.x && y == q.y && z == q.z;
     }
 
@@ -36,13 +36,13 @@ class Pos {
     public int hashCode() { return x + y + z; }
 }
 
-public class Cube implements HeuristicProblem<Pos, Integer> {
+public class Cube implements HeuristicProblem<CPos, Integer> {
 
-    public Pos initialState() {
-        return new Pos(1000, 1000, 1000);
+    public CPos initialState() {
+        return new CPos(1000, 1000, 1000);
     }
 
-    public List<Integer> actions(Pos state) {
+    public List<Integer> actions(CPos state) {
         List<Integer> l = new ArrayList<Integer>();
         if (state.x > 0)
             l.add(1);
@@ -53,21 +53,21 @@ public class Cube implements HeuristicProblem<Pos, Integer> {
         return l;
     }
 
-    public Pos result(Pos s, Integer action) {
+    public CPos result(CPos s, Integer action) {
         switch (action) {
-        case 1: return new Pos(s.x - 1, s.y, s.z);
-        case 2: return new Pos(s.x, s.y - 1, s.z);
-        case 3: return new Pos(s.x, s.y, s.z - 1);
+        case 1: return new CPos(s.x - 1, s.y, s.z);
+        case 2: return new CPos(s.x, s.y - 1, s.z);
+        case 3: return new CPos(s.x, s.y, s.z - 1);
 
         default: throw new Error("unknown action");
         }
     }
 
-    public boolean isGoal(Pos state) {
+    public boolean isGoal(CPos state) {
         return state.x == 0 && state.y == 0 && state.z == 0;
     }
 
-    public double cost(Pos state, Integer action) {
+    public double cost(CPos state, Integer action) {
         switch (action) {
         case 1: return 1000;
         case 2: return state.x;
@@ -77,7 +77,7 @@ public class Cube implements HeuristicProblem<Pos, Integer> {
         }
     }
 
-    public int estimate(Pos state) {
+    public int estimate(CPos state) {
         // The heuristic (1000 * state.x) is optimal and will lead to the goal immediately.
         //
         // A non-optimal heuristic such as (980 * state.x) will also lead to the goal pretty quickly.

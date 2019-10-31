@@ -13,19 +13,19 @@ import java.util.List;
 // The goal is to get to (80, 80) with minimal total cost.
 // The cheapest solution has cost = 120.
 
-class Pos {
+class GPos {
 	int x, y;
 	
-	Pos(int x, int y) {
+	GPos(int x, int y) {
 		this.x = x; this.y = y;
 	}
 	
 	@Override
 	public boolean equals(Object o) {
-		if (!(o instanceof Pos))
+		if (!(o instanceof GPos))
 			return false;
 		
-	    Pos q = (Pos) o;
+	    GPos q = (GPos) o;
 	    return x == q.x && y == q.y;
 	}
 	
@@ -35,8 +35,8 @@ class Pos {
 	@Override
 	public String toString() { return "(" + x + ", " + y + ")"; }
 	
-	Pos plus(Vec v) {
-		return new Pos(x + v.x, y + v.y);
+	GPos plus(Vec v) {
+		return new GPos(x + v.x, y + v.y);
 	}
 }
 
@@ -57,7 +57,7 @@ class Move {
 	}
 }
 
-public class Grid implements Problem<Pos, Integer> {
+public class Grid implements Problem<GPos, Integer> {
 	
 	static final Move[] moves = {
 		new Move(new Vec(-1, 0), 1),
@@ -68,29 +68,29 @@ public class Grid implements Problem<Pos, Integer> {
 		new Move(new Vec(2, 2), 5)
 	};
 
-	public Pos initialState() {
-		return new Pos(0, 0);
+	public GPos initialState() {
+		return new GPos(0, 0);
 	}
 	
 	static final List<Integer> allActions = List.of(0, 1, 2, 3, 4, 5);
 
-	public List<Integer> actions(Pos state) { return allActions; }
+	public List<Integer> actions(GPos state) { return allActions; }
 
-	public Pos result(Pos state, Integer action) {
+	public GPos result(GPos state, Integer action) {
 		return state.plus(moves[action].v);
 	}
 
-	public boolean isGoal(Pos state) {
+	public boolean isGoal(GPos state) {
 		return state.x == 80 && state.y == 80;
 	}
 
-	public double cost(Pos state, Integer action) {
+	public double cost(GPos state, Integer action) {
 		return moves[action].cost;
 	}
 
 	public static void test() {
 		Grid g = new Grid();
-		Solution<Pos, Integer> s = Ucs.search(g);
+		Solution<GPos, Integer> s = Ucs.search(g);
 		if (s != null)
 			System.out.format("total cost is %.1f\n", s.pathCost);
 		else
