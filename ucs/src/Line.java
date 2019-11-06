@@ -22,12 +22,4 @@ public class Line implements Problem<Integer, Integer> {
 	
 	public double cost(Integer state, Integer action) { return cost[action]; }
 	
-	public static void test() {
-		Line l = new Line();
-		Solution<Integer, Integer> s = Ucs.search(l);
-		if (s != null)
-			System.out.format("total cost is %.1f\n", s.pathCost);
-		else
-			System.out.println("no solution found");
-	}
 }

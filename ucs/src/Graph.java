@@ -45,16 +45,4 @@ public class Graph implements Problem<Integer, Edge> {
   public boolean isGoal(Integer state) { return state == 4; }
 
   public double cost(Integer state, Edge action) { return action.weight; }
-
-  public static void test() {
-    Graph g = new Graph();
-    Solution<Integer, Edge> s = Ucs.search(g);
-    if (s != null) {
-      for (Edge a: s.actions)
-        System.out.println("vertex: " + a.dest);
-        System.out.println("reached goal: " + s.goalState);
-        System.out.println("total cost: " + s.pathCost);
-      }
-    else System.out.println("no solution");
-  }
 }

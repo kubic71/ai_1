@@ -88,12 +88,4 @@ public class Grid implements Problem<GPos, Integer> {
 		return moves[action].cost;
 	}
 
-	public static void test() {
-		Grid g = new Grid();
-		Solution<GPos, Integer> s = Ucs.search(g);
-		if (s != null)
-			System.out.format("total cost is %.1f\n", s.pathCost);
-		else
-			System.out.println("no solution found");
-	}
 }
