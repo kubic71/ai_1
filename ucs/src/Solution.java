@@ -16,8 +16,8 @@ class Solution<S, A> {
 
     // Check that the actions actually lead from the problem's initial state to the goal.
     for (A action : actions) {
-      state = prob.result(state, action);
       cost += prob.cost(state, action);
+      state = prob.result(state, action);
     }
     
     return state.equals(goalState) && prob.isGoal(goalState) && pathCost == cost;
