@@ -59,3 +59,24 @@ class Pig implements Game<PigState, Boolean> {
         }
     }
 }
+
+class RandomPigStrategy implements Strategy<PigState, Boolean> {
+    Random random = new Random();
+
+    public Boolean action(PigState s) {
+        return random.nextBoolean();
+    }
+}
+
+class BasicPigStrategy implements Strategy<PigState, Boolean> {
+    public Boolean action(PigState state) {
+        return state.score[state.player] + state.turnScore >= 100 ||
+               state.turnScore >= 15 ? Pig.Hold : Pig.Roll;
+    }
+}
+
+class PigTest {
+    public static void main(String[] args) {
+        Runner.play(new Pig(), new RandomPigStrategy(), new BasicPigStrategy(), 20);
+    }
+}
