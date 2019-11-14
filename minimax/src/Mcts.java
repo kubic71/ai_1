@@ -16,4 +16,8 @@ class Mcts<S, A> implements Strategy<S, A> {
     return null;
   }
 
+  public void reportStats() {
+      System.out.println("Report statistics here.");
+  }
+
 }

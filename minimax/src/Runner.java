@@ -23,7 +23,7 @@ public class Runner {
 			else ++wins[2];
 		}
 		
-		System.out.format("%s won %d (%.1f%%), ",
+		System.out.format("    %s won %d (%.1f%%), ",
 			name1, wins[1], 100.0 * wins[1] / count);
 		
 		if (wins[0] > 0)
@@ -31,5 +31,11 @@ public class Runner {
 		
 		System.out.format("%s won %d (%.1f%%)\n",
 			name2, wins[2], 100.0 * wins[2] / count);
-	}
+    }
+    
+    public static <S, A> void play2(
+			Game<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2, int count) {
+        play(game, strat1, strat2, count);
+        play(game, strat2, strat1, count);
+    }
 }
