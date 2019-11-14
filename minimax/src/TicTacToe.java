@@ -178,16 +178,4 @@ public class TicTacToe implements Game<TTState, Integer> {
     public boolean isDone(TTState state) { return state.isDone(); }
 
     public double outcome(TTState state) { return state.outcome(); }
-
-    public static void main(String[] args) {
-        TicTacToe game = new TicTacToe();
-
-        Strategy<TTState, Integer> emm =
-            new Expectiminimax<>(game, new TTActionGenerator(), new TTResultGenerator(),
-                                 new TTEvaluator(), 8); 
-
-        System.out.println("running");
-        Runner.play(game, emm, new TTBasicStrategy(), 20);
-    }
-
 }
