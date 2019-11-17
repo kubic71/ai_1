@@ -8,7 +8,6 @@ class ExpectiminimaxTest {
             new Expectiminimax<>(game, new TTActionGenerator(), new TTResultGenerator(),
                                  new TTEvaluator(), 0); 
 
-        Runner.play(game, emm, new TTBasicStrategy(), Games);
-        Runner.play(game, new TTBasicStrategy(), emm, Games);
+        Runner.play2(game, emm, new BasicTicTacToeStrategy(), Games);
     }
 }

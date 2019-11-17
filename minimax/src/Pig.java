@@ -77,9 +77,20 @@ class RandomPigStrategy implements Strategy<PigState, Boolean> {
 }
 
 class BasicPigStrategy implements Strategy<PigState, Boolean> {
+    int holdAt;
+
+    public BasicPigStrategy(int holdAt) { this.holdAt = holdAt; }
+
+    public BasicPigStrategy() { holdAt = 20; }
+
     public Boolean action(PigState s) {
         return s.score[s.player] + s.turnScore >= Pig.Goal ||
-               s.turnScore >= 20 ? Pig.Hold : Pig.Roll;
+               s.turnScore >= holdAt ? Pig.Hold : Pig.Roll;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s-%d", getClass().getSimpleName(), holdAt);
     }
 }
 
@@ -89,8 +100,10 @@ class PigActionGenerator implements ActionGenerator<PigState, Boolean> {
     public List<Boolean> actions(PigState state) { return both; }
 }
 
+/*
 class PigTest {
     public static void main(String[] args) {
-        Runner.play2(new Pig(), new RandomPigStrategy(), new BasicPigStrategy(), 5000);
+        Runner.play2(new Pig(), new BasicPigStrategy(20), new BasicPigStrategy(5), 1000);
     }
 }
+*/

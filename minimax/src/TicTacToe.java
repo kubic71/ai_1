@@ -124,7 +124,7 @@ class TTState {
     }
 }
 
-class TTRandomStrategy implements Strategy<TTState, Integer> {
+class RandomTicTacToeStrategy implements Strategy<TTState, Integer> {
     Random rand = new Random();
 
     public Integer action(TTState s) {
@@ -132,7 +132,7 @@ class TTRandomStrategy implements Strategy<TTState, Integer> {
     }
 }
 
-class TTBasicStrategy implements Strategy<TTState, Integer> {
+class BasicTicTacToeStrategy implements Strategy<TTState, Integer> {
     public Integer action(TTState s) {
         // win if possible
         for (int i = 0 ; i < 9 ; ++i)
@@ -179,3 +179,11 @@ public class TicTacToe implements Game<TTState, Integer> {
 
     public double outcome(TTState state) { return state.outcome(); }
 }
+
+/*
+class TicTacTest {
+    public static void main(String[] args) {
+        Runner.play2(new TicTacToe(), new BasicTicTacToeStrategy(), new RandomTicTacToeStrategy(), 1000);
+    }
+}
+*/

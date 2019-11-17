@@ -5,12 +5,12 @@ class MctsTest {
         int Games = 20;
 
         var mcts = new Mcts<>(game,
-                              new TTBasicStrategy(),   // base strategy
+                              new BasicTicTacToeStrategy(),   // base strategy
                               new TTActionGenerator(),
                               1,                       // determinizations
                               100);                    // time limit (ms)
 
-        Runner.play2(game, mcts, new TTBasicStrategy(), Games);
+        Runner.play2(game, mcts, new BasicTicTacToeStrategy(), Games);
         mcts.reportStats();
     }
 
