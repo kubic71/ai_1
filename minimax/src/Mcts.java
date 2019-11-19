@@ -2,7 +2,7 @@
 class Mcts<S, A> implements Strategy<S, A> {
 
   public Mcts(Game<S, A> game, Strategy<S, A> base, ActionGenerator<S, A> generator, 
-              int determinizations, int timeLimit) {
+              int determinizations, int timeLimitMicros) {
   
     // Your implementation goes here.
     

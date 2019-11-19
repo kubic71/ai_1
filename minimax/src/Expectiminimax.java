@@ -3,7 +3,7 @@ class Expectiminimax<S, A> implements Strategy<S, A> {
   public Expectiminimax(Game<S, A> game,
                         ActionGenerator<S, A> actionGenerator,
                         ResultGenerator<S, A> resultGenerator,
-                        Evaluator<S> evaluator, int maxDepth) {
+                        Evaluator<S> evaluator, int timeLimitMicros) {
 
     // Your implementation goes here.
     
