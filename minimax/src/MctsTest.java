@@ -7,8 +7,8 @@ class MctsTest {
         var mcts = new Mcts<>(game,
                               new BasicTicTacToeStrategy(),   // base strategy
                               new TTActionGenerator(),
-                              1,                       // determinizations
-                              100);                    // time limit (ms)
+                              1,                           // determinizations
+                              100_000);                    // time limit (microseconds)
 
         Runner.play2(game, mcts, new BasicTicTacToeStrategy(), Games);
         mcts.reportStats();
@@ -23,7 +23,7 @@ class MctsTest {
                               new BasicPigStrategy(),     // base strategy
                               new PigActionGenerator(),
                               20,                          // determinizations
-                              1);                        // time limit (ms)
+                              1000);                       // time limit (microseconds)
 
         Runner.play2(game, mcts, new BasicPigStrategy(), Games);
         mcts.reportStats();
