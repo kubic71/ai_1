@@ -1,6 +1,6 @@
 import java.util.List;
 
-class Solution<S, A> {
+public class Solution<S, A> {
   public List<A> actions;  // series of actions from start state to goal state
   public S goalState;      // goal state that was reached
   public double pathCost;  // total cost from start state to goal
@@ -24,7 +24,7 @@ class Solution<S, A> {
   }
 
   // Describe a solution.
-  static <S, A> void report(Solution<S, A> solution, Problem<S, A> prob) {
+  public static <S, A> void report(Solution<S, A> solution, Problem<S, A> prob) {
     if (solution == null)
       System.out.println("no solution found");
     else if (!solution.isValid(prob))

@@ -1,7 +1,7 @@
 import java.util.List;
 
 // S = state type, A = action type
-interface Problem<S, A> {
+public interface Problem<S, A> {
   S initialState();
   List<A> actions(S state);
   S result(S state, A action);
