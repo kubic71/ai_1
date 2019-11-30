@@ -3,7 +3,7 @@ import java.util.*;
 // An empty problem.  The start state is the goal.
 // There are no actions.
 
-class Empty implements Problem<Integer, Integer> {
+public class Empty implements Problem<Integer, Integer> {
   public Integer initialState() { return 0; }
 
   public List<Integer> actions(Integer state) { return new ArrayList<Integer>(); }
