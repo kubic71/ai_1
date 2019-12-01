@@ -4,11 +4,11 @@ class MctsTest {
 
         int Games = 20;
 
-        var mcts = new Mcts<>(game,
+        var mcts = new Mcts<TTState, Integer>(game,
                               new BasicTicTacToeStrategy(),   // base strategy
                               new TTActionGenerator(),
-                              1,                           // determinizations
-                              100_000);                    // time limit (microseconds)
+                              new TTResultGenerator(),
+                              100);                          // number of iterations
 
         Runner.play2(game, mcts, new BasicTicTacToeStrategy(), Games);
         mcts.reportStats();
@@ -20,10 +20,10 @@ class MctsTest {
         int Games = 500;
 
         var mcts = new Mcts<>(game,
-                              new BasicPigStrategy(),     // base strategy
+                              new BasicPigStrategy(),      // base strategy
                               new PigActionGenerator(),
-                              20,                          // determinizations
-                              1000);                       // time limit (microseconds)
+                              new PigResultGenerator(),
+                              1000);                       // number of iterations
 
         Runner.play2(game, mcts, new BasicPigStrategy(), Games);
         mcts.reportStats();

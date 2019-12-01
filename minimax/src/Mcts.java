@@ -1,8 +1,9 @@
 // Monte Carlo tree search
 class Mcts<S, A> implements Strategy<S, A> {
 
-  public Mcts(Game<S, A> game, Strategy<S, A> base, ActionGenerator<S, A> generator, 
-              int determinizations, int timeLimitMicros) {
+  public Mcts(Game<S, A> game, Strategy<S, A> base,
+              ActionGenerator<S, A> actionGenerator, ResultGenerator<S, A> resultGenerator,
+              int limit) {
   
     // Your implementation goes here.
     
