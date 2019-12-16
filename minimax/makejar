@@ -1,0 +1,7 @@
+#!/bin/bash
+
+jar cf minimax_tmp.jar -C target/classes .
+
+zip -d minimax_tmp.jar Expectiminimax.class ExpectiminimaxTest.class Mcts.class MctsTest.class
+
+mv -f minimax_tmp.jar minimax.jar
