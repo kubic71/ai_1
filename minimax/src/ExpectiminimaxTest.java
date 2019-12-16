@@ -1,5 +1,5 @@
-class ExpectiminimaxTest {
-    static boolean testTicTacToe() {
+public class ExpectiminimaxTest {
+    public static boolean testTicTacToe() {
         TicTacToe game = new TicTacToe();
 
         int Games = 400;
@@ -12,7 +12,7 @@ class ExpectiminimaxTest {
         return Runner.report(Games, wins, true, 45, 3);
     }
 
-    static boolean testPig() {
+    public static boolean testPig() {
         Pig game = new Pig();
 
         int Games = 10000;
