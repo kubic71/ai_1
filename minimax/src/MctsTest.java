@@ -24,7 +24,7 @@ class MctsTest {
                        5000); 
 
         int[][] wins = Runner.play2(game, emm, new RandomPigStrategy(), Games);
-        return Runner.report(Games, wins, false, 57, 53);
+        return Runner.report(Games, wins, false, 55, 50);
     }
 
     public static void test(String[] args) {
