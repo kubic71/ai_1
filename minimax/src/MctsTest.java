@@ -1,36 +1,34 @@
 class MctsTest {
-    static void playTicTacToe() {
+    static boolean testTicTacToe() {
         TicTacToe game = new TicTacToe();
 
-        int Games = 20;
+        int Games = 400;
 
-        var mcts = new Mcts<TTState, Integer>(game,
-                              new BasicTicTacToeStrategy(),   // base strategy
-                              new TTActionGenerator(),
-                              new TTResultGenerator(),
-                              100);                          // number of iterations
+        Strategy<TTState, Integer> mcts =
+            new Mcts<>(game, new BasicTicTacToeStrategy(),
+                       new TTActionGenerator(), new TTResultGenerator(),
+                       1000);
 
-        Runner.play2(game, mcts, new BasicTicTacToeStrategy(), Games);
-        mcts.reportStats();
+        int[][] wins = Runner.play2(game, mcts, new BasicTicTacToeStrategy(), Games);
+        return Runner.report(Games, wins, true, 45, 3);
     }
 
-    static void playPig() {
+    static boolean testPig() {
         Pig game = new Pig();
 
-        int Games = 500;
+        int Games = 100;
 
-        var mcts = new Mcts<>(game,
-                              new BasicPigStrategy(),      // base strategy
-                              new PigActionGenerator(),
-                              new PigResultGenerator(),
-                              1000);                       // number of iterations
+        Strategy<PigState, Boolean> emm =
+            new Mcts<>(game, new RandomPigStrategy(),
+                       new PigActionGenerator(), new PigResultGenerator(),
+                       5000); 
 
-        Runner.play2(game, mcts, new BasicPigStrategy(), Games);
-        mcts.reportStats();
+        int[][] wins = Runner.play2(game, emm, new RandomPigStrategy(), Games);
+        return Runner.report(Games, wins, false, 57, 53);
     }
 
-    public static void main(String[] args) {
-        playTicTacToe();
-        playPig();
+    public static void test(String[] args) {
+        testTicTacToe();
+        testPig();
     }
 }

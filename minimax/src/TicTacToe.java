@@ -4,7 +4,7 @@ class TTState {
     int[] board = new int[9];
     public int player = 1;
 
-    Random rand = new Random();
+    static Random rand = new Random();
 
     public TTState() { }
     public TTState(int[] board, int player) {
@@ -125,8 +125,6 @@ class TTState {
 }
 
 class RandomTicTacToeStrategy implements Strategy<TTState, Integer> {
-    Random rand = new Random();
-
     public Integer action(TTState s) {
         return s.randomAction();
     }

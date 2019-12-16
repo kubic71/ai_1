@@ -1,13 +1,15 @@
 import org.apache.commons.math3.stat.interval.*;
 
 public class Runner {
+    static boolean debug = false;
+
     static <S, A> String name(Strategy<S, A> strat) {
         String s = strat.toString();
         return s.contains("@") ? strat.getClass().getSimpleName() : s;
     }
 
     public static <S, A> int[] play(Game<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2,
-                                   int count) {
+                                    int count) {
         System.out.printf("\nplaying %d games: %s (player 1) vs. %s (player 2)\n",
                           count, name(strat1), name(strat2));
 
@@ -17,15 +19,27 @@ public class Runner {
 			S s = game.initialState();
 			while (!game.isDone(s)) {
 				A a = game.player(s) == 1 ? strat1.action(s) : strat2.action(s);
-				game.apply(s, a);
+                game.apply(s, a);
+                if (debug)
+                    System.out.println(s);
 			}
 
 			double o = game.outcome(s);
-			if (o == 0.5)
-				++wins[0];
-			else if (o > 0.5)
-				++wins[1];
-			else ++wins[2];
+			if (o == 0.5) {
+                ++wins[0];
+                if (debug)
+                    System.out.println("draw");
+            }
+			else if (o > 0.5) {
+                ++wins[1];
+                if (debug)
+                    System.out.printf("%s wins\n", name(strat1));
+            }
+            else {
+                ++wins[2];
+                if (debug)
+                    System.out.printf("%s wins\n", name(strat2));
+            }                
 		}
 		
 		System.out.format("    %s won %d (%.1f%%), ", name(strat1), wins[1], 100.0 * wins[1] / count);
@@ -39,7 +53,7 @@ public class Runner {
         return wins;
     }
 
-    public static <S, A> void play2(
+    public static <S, A> int[][] play2(
 			Game<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2, int count) {
         int[][] wins = new int[3][];
         wins[1] = play(game, strat1, strat2, count);
@@ -70,5 +84,24 @@ public class Runner {
                 System.out.printf(", draws %4.1f%% - %4.1f%%", lo2, hi2);
             System.out.println();
         }
+
+        return wins;
+    }
+
+    static boolean report(int games, int[][] wins, boolean neverLose, float minWin1, float minWin2) {
+        if (neverLose && (wins[1][2] > 0 || wins[2][1] > 0))
+            System.out.println("FAILURE: should never lose a game");
+        else if (1.0 * wins[1][1] / games < minWin1 / 100.0)
+            System.out.printf("FAILURE: should win at least %d%% of games as player 1\n",
+                              minWin1);
+        else if (1.0 * wins[2][2] / games < minWin2 / 100.0)
+            System.out.printf("FAILURE: should win at least %d%% of games as player 2\n",
+                              minWin2);
+        else {
+            System.out.println("PASSED");
+            return true;
+        }
+
+        return false;
     }
 }
