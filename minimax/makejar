@@ -2,6 +2,6 @@
 
 jar cf minimax_tmp.jar -C target/classes .
 
-zip -d minimax_tmp.jar Expectiminimax.class ExpectiminimaxTest.class Mcts.class MctsTest.class
+zip -d minimax_tmp.jar Expectiminimax.class Mcts.class
 
 mv -f minimax_tmp.jar minimax.jar
