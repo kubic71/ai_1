@@ -88,7 +88,7 @@ public class Runner {
         return wins;
     }
 
-    static boolean report(int games, int[][] wins, boolean neverLose, float minWin1, float minWin2) {
+    static boolean report(int games, int[][] wins, boolean neverLose, int minWin1, int minWin2) {
         if (neverLose && (wins[1][2] > 0 || wins[2][1] > 0))
             System.out.println("FAILURE: should never lose a game");
         else if (1.0 * wins[1][1] / games < minWin1 / 100.0)
