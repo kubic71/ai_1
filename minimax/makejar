@@ -1,7 +1,9 @@
 #!/bin/bash
 
-jar cf minimax_tmp.jar -C target/classes .
-
-zip -d minimax_tmp.jar Expectiminimax.class ExpectiminimaxTest.class Mcts.class MctsTest.class Pig.class TicTacToe.class
-
-mv -f minimax_tmp.jar minimax.jar
+jar cf minimax.jar -C target/classes ActionGenerator.class \
+                   -C target/classes Evaluator.class \
+                   -C target/classes Game.class \
+                   -C target/classes Possibility.class \
+                   -C target/classes ResultGenerator.class \
+                   -C target/classes Runner.class \
+                   -C target/classes Strategy.class
