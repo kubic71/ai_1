@@ -1,3 +1,4 @@
+import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.apache.commons.math3.stat.interval.*;
 
 public class Runner {
@@ -88,20 +89,28 @@ public class Runner {
         return wins;
     }
 
-    public static boolean report(int games, int[][] wins, boolean neverLose, int minWin1, int minWin2) {
-        if (neverLose && (wins[1][2] > 0 || wins[2][1] > 0))
+    public static boolean report(int games, int[][] wins, boolean neverLose,
+                                 double shouldWin1, double shouldWin2) {
+        if (neverLose && (wins[1][2] > 0 || wins[2][1] > 0)) {
             System.out.println("FAILURE: should never lose a game");
-        else if (1.0 * wins[1][1] / games < minWin1 / 100.0)
-            System.out.printf("FAILURE: should win at least %d%% of games as player 1\n",
-                              minWin1);
-        else if (1.0 * wins[2][2] / games < minWin2 / 100.0)
-            System.out.printf("FAILURE: should win at least %d%% of games as player 2\n",
-                              minWin2);
-        else {
-            System.out.println("PASSED");
-            return true;
+            return false;
         }
-
-        return false;
+        double alpha = 0.01;
+        int minWin1 = new BinomialDistribution(games, shouldWin1)
+                          .inverseCumulativeProbability(alpha);
+        System.out.printf("minWin1 = %d\n", minWin1);
+        if (wins[1][1] < minWin1) {
+            System.out.printf("FAILURE: should win at least %d games as player 1\n", minWin1);
+            return false;
+        }
+        int minWin2 = new BinomialDistribution(games, shouldWin2)
+                          .inverseCumulativeProbability(alpha);
+        System.out.printf("minWin2 = %d\n", minWin2);
+        if (wins[2][2] < minWin2) {
+            System.out.printf("FAILURE: should win at least %d games as player 2\n", minWin2);
+            return false;
+        }
+        System.out.println("PASSED");
+        return true;
     }
 }

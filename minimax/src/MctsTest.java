@@ -2,7 +2,7 @@ public class MctsTest {
     public static boolean testTicTacToe() {
         TicTacToe game = new TicTacToe();
 
-        int Games = 400;
+        int Games = 500;
 
         Mcts<TTState, Integer> mcts =
             new Mcts<>(game, new BasicTicTacToeStrategy(),
@@ -11,13 +11,14 @@ public class MctsTest {
 
         int[][] wins = Runner.play2(game, mcts, new BasicTicTacToeStrategy(), Games);
         mcts.reportStats();
-        return Runner.report(Games, wins, true, 45, 3);
+
+        return Runner.report(Games, wins, true, 0.5, .06);
     }
 
     public static boolean testPig() {
         Pig game = new Pig();
 
-        int Games = 100;
+        int Games = 50;
 
         Mcts<PigState, Boolean> mcts =
             new Mcts<>(game, new RandomPigStrategy(),
@@ -26,11 +27,12 @@ public class MctsTest {
 
         int[][] wins = Runner.play2(game, mcts, new RandomPigStrategy(), Games);
         mcts.reportStats();
-        return Runner.report(Games, wins, false, 55, 50);
+
+        return Runner.report(Games, wins, false, .625, .570);
     }
 
-    public static void test(String[] args) {
+    public static void main(String[] args) {
         testTicTacToe();
-        testPig();
+        // testPig();
     }
 }
