@@ -2,7 +2,7 @@ import org.apache.commons.math3.distribution.BinomialDistribution;
 import org.apache.commons.math3.stat.interval.*;
 
 public class Runner {
-    static boolean debug = false;
+    static int debugLevel = 0;
 
     static <S, A> String name(Strategy<S, A> strat) {
         String s = strat.toString();
@@ -21,24 +21,24 @@ public class Runner {
 			while (!game.isDone(s)) {
 				A a = game.player(s) == 1 ? strat1.action(s) : strat2.action(s);
                 game.apply(s, a);
-                if (debug)
+                if (debugLevel >= 2)
                     System.out.println(s);
 			}
 
 			double o = game.outcome(s);
 			if (o == 0.5) {
                 ++wins[0];
-                if (debug)
+                if (debugLevel >= 1)
                     System.out.println("draw");
             }
 			else if (o > 0.5) {
                 ++wins[1];
-                if (debug)
+                if (debugLevel >= 1)
                     System.out.printf("%s wins\n", name(strat1));
             }
             else {
                 ++wins[2];
-                if (debug)
+                if (debugLevel >= 1)
                     System.out.printf("%s wins\n", name(strat2));
             }                
 		}
