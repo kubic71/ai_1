@@ -31,8 +31,8 @@ public class MctsTest {
         return Runner.report(Games, wins, false, .625, .570);
     }
 
-    public static void main(String[] args) {
+    public static void test(String[] args) {
         testTicTacToe();
-        // testPig();
+        testPig();
     }
 }

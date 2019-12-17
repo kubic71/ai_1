@@ -25,8 +25,8 @@ public class ExpectiminimaxTest {
         return Runner.report(Games, wins, false, 0.548, 0.509);
     }
 
-    public static void main(String[] args) {
-        // testTicTacToe();
+    public static void test(String[] args) {
+        testTicTacToe();
         testPig();
     }
 }
