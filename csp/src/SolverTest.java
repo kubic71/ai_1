@@ -40,7 +40,7 @@ public class SolverTest {
             l.add(a);
             if (setVars) {
                 // check that we can repeat the assignment of a known value
-                check(s.setVar(a.var, a.val));
+                s.setVar(a.var, a.val);
             }
         }
         Collections.sort(l, (a, b) -> Integer.compare(a.var, b.var));
@@ -63,6 +63,14 @@ public class SolverTest {
         return s;
     }
 
+    static void test0() {
+        Solver s = new Solver(3);
+        s.add(new Constraint(1, List.of(0)));
+        s.add(new Constraint(1, List.of(1)));
+        s.add(new Constraint(0, List.of(2)));
+        checkDeduction(s, List.of(v(0, true), v(1, true), v(2, false)));
+    }
+
     static void test1(boolean setVars) {
         Solver s = solver4();
         s.add(new Constraint(2, List.of(0, 2, 3)));
@@ -83,7 +91,7 @@ public class SolverTest {
         Solver s = new Solver(9);
         
         for (int i : List.of(2, 5, 6))
-            check(s.setVar(i, false));
+            s.setVar(i, false);
         
         s.add(new Constraint(1, List.of(1, 4, 5)));
         s.add(new Constraint(1, List.of(1, 2, 4, 7, 8)));
@@ -97,7 +105,7 @@ public class SolverTest {
         Solver s = new Solver(16);
         
         for (int i = 0 ; i < 8 ; ++i)
-            check(s.setVar(i, false));
+            s.setVar(i, false);
         
         s.add(new Constraint(1, List.of(0, 1, 5, 8, 9)));
         s.add(new Constraint(1, List.of(0, 1, 2, 4, 6, 8, 9, 10)));
@@ -113,7 +121,7 @@ public class SolverTest {
 
         for (int i = 4; i < 16; ++i)
             if (i % 4 == 0 || i % 4 == 1)
-                check(s.setVar(i, false));
+                s.setVar(i, false);
 
         s.add(new Constraint(1, List.of(0, 1, 5, 8, 9)));
         s.add(new Constraint(2, List.of(0, 1, 2, 4, 6, 8, 9, 10)));
@@ -128,7 +136,7 @@ public class SolverTest {
         Solver s = new Solver(25);
         
         for (int i : List.of(10, 11, 12, 13, 14, 15, 16, 18, 19, 20, 21, 23, 24))
-            check(s.setVar(i, false));
+            s.setVar(i, false);
         
         s.add(new Constraint(1, List.of(5, 6, 11, 15, 16)));
         s.add(new Constraint(2, List.of(5, 6, 7, 10, 12, 15, 16, 17)));
@@ -144,6 +152,7 @@ public class SolverTest {
     }
 
     public static void main(String[] args) {
+        test0();
         test1(false);
         test1(true);
         test2();

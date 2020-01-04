@@ -7,10 +7,8 @@ public class Solver {
     public void add(Constraint c) {
     }
     
-    // Assign a fixed value to a variable.  Return true if the assignment was made,
-    // or false if it would violate an existing constraint.
-    public boolean setVar(int i, boolean v) {
-        return false;
+    // Assign a fixed value to a variable.
+    public void setVar(int i, boolean v) {
     }
     
     // Deduce that some variable must have a certain value, and assign that value
