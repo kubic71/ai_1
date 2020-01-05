@@ -1,3 +1,5 @@
+package ai_1.csp;
+
 public class Assignment {
     public int var;
     public boolean val;

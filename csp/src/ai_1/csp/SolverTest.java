@@ -1,3 +1,5 @@
+package ai_1.csp;
+
 import java.util.*;
 
 public class SolverTest {

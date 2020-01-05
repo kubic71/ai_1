@@ -1,3 +1,5 @@
+package ai_1.csp;
+
 public class Solver {
     // Create a Solver for a problem with _n_ variables.
     public Solver(int n) {
