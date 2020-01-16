@@ -33,7 +33,7 @@ public class SolverTest {
         System.out.println();
     }
 
-    static void checkDeduction(Solver s, List<Assignment> m, boolean setVars) {
+    static boolean checkDeduction(Solver s, List<Assignment> m, boolean setVars) {
         List<Assignment> l = new ArrayList<Assignment>();
         while (true) {
             Assignment a = s.solve();
@@ -49,12 +49,13 @@ public class SolverTest {
         if (!equal(l, m)) {
             System.out.println("wrong assignments were deduced:");
             printAssignments(l);
-            throw new Error();
+            return false;
         }
+        return true;
     }
 
-    static void checkDeduction(Solver s, List<Assignment> m) {
-        checkDeduction(s, m, false);
+    static boolean checkDeduction(Solver s, List<Assignment> m) {
+        return checkDeduction(s, m, false);
     }	
 
     static Solver solver4() {
@@ -65,30 +66,33 @@ public class SolverTest {
         return s;
     }
 
-    static void test0() {
+    static boolean test_a() {
         Solver s = new Solver(3);
         s.add(new Constraint(1, List.of(0)));
         s.add(new Constraint(1, List.of(1)));
         s.add(new Constraint(0, List.of(2)));
-        checkDeduction(s, List.of(v(0, true), v(1, true), v(2, false)));
+        return checkDeduction(s, List.of(v(0, true), v(1, true), v(2, false)));
     }
 
-    static void test1(boolean setVars) {
+    static boolean test_b(boolean setVars) {
         Solver s = solver4();
         s.add(new Constraint(2, List.of(0, 2, 3)));
 
-        checkDeduction(s, List.of(v(0, true), v(1, false), v(2, true), v(3, false)), setVars);
+        return checkDeduction(s, List.of(v(0, true), v(1, false), v(2, true), v(3, false)), setVars);
     }
 
-    static void test2() {
+    public static boolean test1() {
         Solver s = solver4();
-        check(s.solve() == null);   // no deduction should be possible
+        if (s.solve() != null) {
+            System.out.println("error: no deduction should be possible");
+            return false;
+        }
 
         s.setVar(0, false);
-        checkDeduction(s, List.of(v(1, true), v(2, false), v(3, true)), true);
+        return checkDeduction(s, List.of(v(1, true), v(2, false), v(3, true)), true);
     }
     
-    static void test3() {
+    public static boolean test2() {
         // Test a situation on a 3 x 3 Minesweeper board.
         Solver s = new Solver(9);
         
@@ -99,10 +103,10 @@ public class SolverTest {
         s.add(new Constraint(1, List.of(1, 2, 4, 7, 8)));
         s.add(new Constraint(1, List.of(3, 4, 7)));
         
-        checkDeduction(s, List.of(v(7, false), v(8, false)));
+        return checkDeduction(s, List.of(v(7, false), v(8, false)));
     }
     
-    static void test4() {
+    public static boolean test3() {
         // Test a situation on a 4 x 4 Minesweeper board.
         Solver s = new Solver(16);
         
@@ -114,10 +118,10 @@ public class SolverTest {
         s.add(new Constraint(1, List.of(1, 2, 3, 5, 7, 9, 10, 11)));
         s.add(new Constraint(1, List.of(2, 3, 6, 10, 11)));
         
-        checkDeduction(s, List.of(v(8, true), v(9, false), v(10, false), v(11, true)));
+        return checkDeduction(s, List.of(v(8, true), v(9, false), v(10, false), v(11, true)));
     }
     
-    static void test5() {
+    public static boolean test4() {
         // Test a situation on a 4 x 4 Minesweeper board.
         Solver s = new Solver(16);
 
@@ -130,10 +134,10 @@ public class SolverTest {
         s.add(new Constraint(2, List.of(4, 5, 6, 8, 10, 12, 13, 14)));
         s.add(new Constraint(2, List.of(8, 9, 10, 12, 14)));
 
-        checkDeduction(s, List.of(v(2, false), v(6, false), v(10, true), v(14, true)));
+        return checkDeduction(s, List.of(v(2, false), v(6, false), v(10, true), v(14, true)));
     }
     
-    static void test6() {
+    public static boolean test5() {
         // Test a situation on a 5 x 5 Minesweeper board.
         Solver s = new Solver(25);
         
@@ -150,18 +154,12 @@ public class SolverTest {
         s.add(new Constraint(1, List.of(12, 13, 14, 17, 19, 22, 23, 24)));
         s.add(new Constraint(1, List.of(17, 18, 19, 22, 24)));
         
-        checkDeduction(s, List.of(v(5, false), v(6, true), v(8, true), v(9, false)));
+        return checkDeduction(s, List.of(v(5, false), v(6, true), v(8, true), v(9, false)));
     }
 
     public static void main(String[] args) {
-        test0();
-        test1(false);
-        test1(true);
-        test2();
-        test3();
-        test4();
-        test5();
-        test6();
-        System.out.println("all tests succeeded");
+        if (test_a() && test_b(false) && test_b(true) &&
+            test1() && test2() && test3() && test4() && test5())
+            System.out.println("all tests succeeded");
     }
 }
