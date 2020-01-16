@@ -34,6 +34,9 @@ public class SolverTest {
     }
 
     static boolean checkDeduction(Solver s, List<Assignment> m, boolean setVars) {
+        System.out.println("should deduce:");
+        printAssignments(m);
+
         List<Assignment> l = new ArrayList<Assignment>();
         while (true) {
             Assignment a = s.solve();
@@ -51,6 +54,7 @@ public class SolverTest {
             printAssignments(l);
             return false;
         }
+        System.out.println("deduced correctly");
         return true;
     }
 
