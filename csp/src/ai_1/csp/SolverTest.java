@@ -157,7 +157,7 @@ public class SolverTest {
         return checkDeduction(s, List.of(v(5, false), v(6, true), v(8, true), v(9, false)));
     }
 
-    public static void main(String[] args) {
+    public static void test(String[] args) {
         if (test_a() && test_b(false) && test_b(true) &&
             test1() && test2() && test3() && test4() && test5())
             System.out.println("all tests succeeded");
