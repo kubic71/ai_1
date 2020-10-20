@@ -1,9 +1,0 @@
-#!/bin/bash
-
-jar cf minimax.jar -C target/classes ActionGenerator.class \
-                   -C target/classes Evaluator.class \
-                   -C target/classes Game.class \
-                   -C target/classes Possibility.class \
-                   -C target/classes ResultGenerator.class \
-                   -C target/classes Runner.class \
-                   -C target/classes Strategy.class
