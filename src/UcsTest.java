@@ -1,6 +1,5 @@
-package search;
-
 import problems.*;
+import search.*;
 
 class UcsTest {
   static <S, A> void runTest(Problem<S, A> prob) {

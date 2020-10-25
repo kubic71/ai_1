@@ -1,4 +1,4 @@
-package search;
+import search.*;
 
 // uniform-cost search
 

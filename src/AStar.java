@@ -1,4 +1,4 @@
-package search;
+import search.*;
 
 // A* search
 
