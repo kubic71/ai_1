@@ -1,6 +1,6 @@
 #!/bin/bash
 
-jar cf ai_1_tmp.jar -C target/classes . \
+jar cf ai_1_tmp.jar -C target/classes .
 
 zip -d ai_1_tmp.jar AStar.class Ucs.class
 
