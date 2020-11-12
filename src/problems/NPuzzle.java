@@ -68,7 +68,7 @@ public class NPuzzle implements HeuristicProblem<PuzzleState, Dir> {
 		return 1;
 	}
 
-	public int estimate(PuzzleState state) {
+	public double estimate(PuzzleState state) {
 		// Compute the sum of the taxicab distances of tiles from their goal positions.
 		int sum = 0;
 		for (int i = 0 ; i < state.size * state.size ; ++i)

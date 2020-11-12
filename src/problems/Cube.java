@@ -81,7 +81,7 @@ public class Cube implements HeuristicProblem<CPos, Integer> {
         }
     }
 
-    public int estimate(CPos state) {
+    public double estimate(CPos state) {
         // The heuristic (1000 * state.x) is optimal and will lead to the goal immediately.
         //
         // A non-optimal heuristic such as (980 * state.x) will also lead to the goal pretty quickly.
