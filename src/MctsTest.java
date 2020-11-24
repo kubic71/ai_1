@@ -16,8 +16,8 @@ public class MctsTest {
     }
 
     public static void main(String[] args) {
-        test(new Trivial(), new RandomStrategy<>(new Trivial()), 1000,
-             100, new RandomStrategy<>(new Trivial()),
+        test(new TrivialGame(), new RandomStrategy<>(new TrivialGame()), 1000,
+             100, new RandomStrategy<>(new TrivialGame()),
              true, 0.6, 0.6);
 
          test(new TicTacToe(), new BasicTicTacToeStrategy(), 1000,
