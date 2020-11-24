@@ -3,7 +3,7 @@ import minimax.*;
 
 public class MctsTest {
     public static <S, A> boolean test(
-        Game<S, A> game, Strategy<S, A> baseStrategy, int limit,
+        AbstractGame<S, A> game, Strategy<S, A> baseStrategy, int limit,
         int numGames, Strategy<S, A> opponent,
         boolean neverLose, double shouldWin1, double shouldWin2) {
 

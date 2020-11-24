@@ -8,7 +8,7 @@ class TTEvaluator implements Evaluator<TTState> {
     }
 }
 
-public class TicTacToe implements Game<TTState, Integer> {
+public class TicTacToe implements AbstractGame<TTState, Integer> {
     public TTState initialState() { return new TTState(); }
 
     public TTState clone(TTState state) { return state.clone(); }

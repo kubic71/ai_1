@@ -3,7 +3,7 @@ package minimax;
 import java.util.List;
 
 // S = state type, A = action type
-public interface Game<S, A> {
+public interface AbstractGame<S, A> {
   S initialState();
   S clone(S state);
   int player(S state);         // which player moves next: 1 (maximizing) or 2 (minimizing)

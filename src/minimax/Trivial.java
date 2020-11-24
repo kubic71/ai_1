@@ -13,7 +13,7 @@ class TrivialState {
 
 // A trivial game. There are two moves. First player 1 chooses a number from 1 to 3,
 // then player 2 chooses a number from 1 to 3. Whoever chose the higher number wins.
-public class Trivial implements Game<TrivialState, Integer> {
+public class Trivial implements AbstractGame<TrivialState, Integer> {
 
     @Override
     public TrivialState initialState() { return new TrivialState(0, 0); }

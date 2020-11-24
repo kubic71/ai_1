@@ -11,7 +11,7 @@ public class Runner {
         return s.contains("@") ? strat.getClass().getSimpleName() : s;
     }
 
-    public static <S, A> int[] play(Game<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2,
+    public static <S, A> int[] play(AbstractGame<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2,
                                     int count) {
         System.out.printf("\nplaying %d games: %s (player 1) vs. %s (player 2)\n",
                           count, name(strat1), name(strat2));
@@ -57,7 +57,7 @@ public class Runner {
     }
 
     public static <S, A> int[][] play2(
-			Game<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2, int count) {
+			AbstractGame<S, A> game, Strategy<S, A> strat1, Strategy<S, A> strat2, int count) {
         int[][] wins = new int[3][];
         wins[1] = play(game, strat1, strat2, count);
         wins[2] = play(game, strat2, strat1, count);

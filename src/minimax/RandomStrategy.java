@@ -3,10 +3,10 @@ package minimax;
 import java.util.*;
 
 public class RandomStrategy<S, A> implements Strategy<S, A> {
-    Game<S, A> game;
+    AbstractGame<S, A> game;
     Random random = new Random(0);
 
-    public RandomStrategy(Game<S, A> game) {
+    public RandomStrategy(AbstractGame<S, A> game) {
         this.game = game;
     }
 
