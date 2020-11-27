@@ -26,14 +26,17 @@ public class Solution<S, A> {
   }
 
   // Describe a solution.
-  public static <S, A> void report(Solution<S, A> solution, Problem<S, A> prob) {
-    if (solution == null)
+  public static <S, A> boolean report(Solution<S, A> solution, Problem<S, A> prob) {
+    if (solution == null) {
       System.out.println("no solution found");
-    else if (!solution.isValid(prob))
+      return false;
+    } else if (!solution.isValid(prob)) {
       System.out.println("solution is invalid!");
-    else {
+      return false;
+    } else {
       System.out.println("solution is valid");
       System.out.format("total cost is %.1f\n", solution.pathCost);
+      return true;
     }
   }
 }
