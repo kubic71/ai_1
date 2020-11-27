@@ -10,7 +10,6 @@ public class MctsTest {
         Mcts<S, A> mcts = new Mcts<>(game, baseStrategy, limit);
 
         int[][] wins = Runner.play2(game, mcts, opponent, numGames);
-        mcts.reportStats();
 
         return Runner.report(numGames, wins, neverLose, shouldWin1, shouldWin2);
     }
@@ -18,7 +17,7 @@ public class MctsTest {
     public static void main(String[] args) {
         test(new TrivialGame(), new RandomStrategy<>(new TrivialGame()), 1000,
              100, new RandomStrategy<>(new TrivialGame()),
-             true, 0.6, 0.6);
+             true, 0.55, 0.55);
 
          test(new TicTacToe(), new BasicTicTacToeStrategy(), 1000,
               500, new BasicTicTacToeStrategy(),

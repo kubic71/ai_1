@@ -1,10 +1,9 @@
 
 import minimax.*;
 
-// Monte Carlo tree search
-class Mcts<S, A> implements Strategy<S, A> {
+class Minimax<S, A> implements Strategy<S, A> {
 
-  public Mcts(AbstractGame<S, A> game, Strategy<S, A> base, int limit) {
+  public Minimax(HeuristicGame<S, A> game, int limit) {
   
     // Your implementation goes here.
     
