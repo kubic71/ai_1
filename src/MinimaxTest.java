@@ -14,11 +14,18 @@ public class MinimaxTest {
         return Runner.report(numGames, wins, neverLose, shouldWin1, shouldWin2);
     }
 
-    public static void main(String[] args) {
-        test(new TrivialGame(), 0, 100, new RandomStrategy<>(new TrivialGame()),
-             true, 0.55, 0.55);
+    public static boolean testTrivial() {
+        return test(new TrivialGame(), 0, 100, new RandomStrategy<>(new TrivialGame()),
+                    true, 0.55, 0.55);
+    }
 
-         test(new TicTacToe(), 0, 500, new BasicTicTacToeStrategy(),
-            true, 0.5, .06);
+    public static boolean testTicTacToe() {
+        return test(new TicTacToe(), 0, 500, new BasicTicTacToeStrategy(),
+                    true, 0.5, .06);
+    }
+
+    public static void main(String[] args) {
+        testTrivial();
+        testTicTacToe();
     }
 }
