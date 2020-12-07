@@ -8,9 +8,7 @@ import minimax.*;
 // If any move will win, play it.  Otherwise, if any move will block an opponent's
 // immediate win, play it.  Otherwise, play a random move.
 
-public class BasicStrategy implements Strategy<ConnectFour, Integer> {
-    Random random = new Random(0);
-    
+public class BasicStrategy extends SeededStrategy<ConnectFour, Integer> {
     @Override
     public Integer action(ConnectFour game) {
         int me = game.turn();

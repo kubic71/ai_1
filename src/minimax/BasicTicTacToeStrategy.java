@@ -1,6 +1,6 @@
 package minimax;
 
-public class BasicTicTacToeStrategy implements Strategy<TTState, Integer> {
+public class BasicTicTacToeStrategy extends SeededStrategy<TTState, Integer> {
     public Integer action(TTState s) {
         // win if possible
         for (int i = 0 ; i < 9 ; ++i)
@@ -14,6 +14,6 @@ public class BasicTicTacToeStrategy implements Strategy<TTState, Integer> {
                 return i;
 
         // move randomly
-        return s.randomAction();
+        return s.randomAction(random);
     }
 }

@@ -11,9 +11,8 @@ import minimax.*;
 // increase in a heuristic score.  If there is a tie, choose randomly from among
 // the possibilities.
 
-public class HeuristicStrategy implements Strategy<ConnectFour, Integer> {
-    Random random = new Random(0);
-    boolean debug = true;
+public class HeuristicStrategy extends SeededStrategy<ConnectFour, Integer> {
+    boolean debug = false;
 
     // value[n] is the value of having n discs within a span of 4 adjacent
     // positions, if the opponent has no discs in those positions.
@@ -101,7 +100,6 @@ public class HeuristicStrategy implements Strategy<ConnectFour, Integer> {
 
             if (me == 2)
                 total = - total;
-            System.out.printf("move %d: change in score is %d\n", x, total);
             if (total > bestVal) {
                 bestVal = total;
                 possible.clear();

@@ -2,9 +2,8 @@ package minimax;
 
 import java.util.*;
 
-public class RandomStrategy<S, A> implements Strategy<S, A> {
+public class RandomStrategy<S, A> extends SeededStrategy<S, A> {
     AbstractGame<S, A> game;
-    Random random = new Random(0);
 
     public RandomStrategy(AbstractGame<S, A> game) {
         this.game = game;

@@ -9,8 +9,6 @@ public class TTState {
     int[] board = new int[9];
     public int player = 1;
 
-    static Random rand = new Random(0);
-
     public TTState() { }
     public TTState(int[] board, int player) {
         this.board = board; this.player = player;
@@ -52,8 +50,8 @@ public class TTState {
         return count;
     }
 
-    int randomAction() {
-        int m = rand.nextInt(countEmpty());
+    int randomAction(Random random) {
+        int m = random.nextInt(countEmpty());
         int i = -1;
         for (int j = 0 ; j <= m ; ++j)
             do {
