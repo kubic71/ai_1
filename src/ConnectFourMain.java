@@ -5,17 +5,22 @@ import connectfour.*;
 import minimax.*;
 
 public class ConnectFourMain {
-    static Strategy<ConnectFour, Integer> strategy(String name) {
-        int arg = 0;
+    static void error(String message) {
+        out.println(message);
+        System.exit(0);
+    }
 
-        /* String base = null;
+    static Strategy<ConnectFour, Integer> strategy(String name) {
+        int arg = -1;
+
+        String base = null;
         int i = name.indexOf('/');
         if (i >= 0) {
             base = name.substring(i + 1);
             name = name.substring(0, i);
-        } */
+        }
 
-        int i = name.indexOf(':');
+        i = name.indexOf(':');
         if (i >= 0) {
             arg = Integer.parseInt(name.substring(i + 1));
             name = name.substring(0, i);
@@ -23,10 +28,21 @@ public class ConnectFourMain {
         switch (name) {
             case "basic": return new BasicStrategy();
             case "heuristic": return new HeuristicStrategy();
-            case "minimax": return new Minimax<>(new ConnectFourGame(), arg);
+            case "mcts":
+                if (arg < 0)
+                    error("must specify number of iterations for mcts");
+                if (base == null)
+                    error("must specify base strategy for mcts");
+                return new Mcts<>(new ConnectFourGame(), strategy(base), arg);
+            case "minimax":
+                if (arg < 0)
+                    error("must specify search depth for minimax");
+                return new Minimax<>(new ConnectFourGame(), arg);
             case "random": return new RandomStrategy<>(new ConnectFourGame());
 
-            default: throw new Error("unknown strategy");
+            default:
+                error("unknown strategy");
+                return null;
         }
     }
 
@@ -40,7 +56,8 @@ public class ConnectFourMain {
         out.println("available strategies:");
         out.println("  basic");
         out.println("  heuristic");
-        out.println("  minimax[:<depth>]");
+        out.println("  mcts:<depth>/<base-strategy>");
+        out.println("  minimax:<depth>");
         out.println("  random");
         System.exit(0);
     }
@@ -70,10 +87,8 @@ public class ConnectFourMain {
         }
 
         if (games > 0) {
-            if (strategies.size() != 2) {
-                out.println("must specify 2 strategies with -sim");
-                return;
-            }
+            if (strategies.size() != 2)
+                error("must specify 2 strategies with -sim");
             Runner.play(new ConnectFourGame(), strategies.get(0), strategies.get(1),
                         games, seed >= 0 ? seed : 0, verbose);
         } else {
