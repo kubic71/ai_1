@@ -1,1 +1,1 @@
-java -cp target/classes connectfour.ConnectFourMain $*
+java -cp target/classes ConnectFourMain $*

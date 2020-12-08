@@ -5,7 +5,7 @@ import minimax.*;
 
 public class ConnectFourGame implements HeuristicGame<ConnectFour, Integer> {
     @Override
-    public ConnectFour initialState() { return new ConnectFour(); }
+    public ConnectFour initialState(int seed) { return new ConnectFour(seed); }
 
     @Override
     public ConnectFour clone(ConnectFour s) { return s.clone(); }
@@ -34,7 +34,7 @@ public class ConnectFourGame implements HeuristicGame<ConnectFour, Integer> {
         return s.winner() >= 0;
     }
 
-    static double[] outcomeMap = { 0.5, 1.0, 0.0 };
+    static double[] outcomeMap = { DRAW, PLAYER_1_WIN, PLAYER_2_WIN };
 
     @Override
     public double outcome(ConnectFour s) {

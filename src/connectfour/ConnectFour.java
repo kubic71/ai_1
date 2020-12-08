@@ -1,8 +1,9 @@
 package connectfour;
 
 import java.awt.Point;
+import java.util.Random;
 
-class ConnectFour {
+public class ConnectFour {
     public static final int Width = 7, Height = 6;
 
     int[][] board = new int[7][];     // board[x][y] is disc at (x, y)
@@ -10,9 +11,21 @@ class ConnectFour {
     int winner = -1;
     int win_x, win_y, win_dx, win_dy;
 
-    public ConnectFour() {
-        for (int x = 0 ; x < Width ; ++x)
-            board[x] = new int[Height];
+    ConnectFour() {  }
+
+    public ConnectFour(int seed) {
+        this();
+        Random random = seed >= 0 ? new Random(seed) : new Random();
+        
+        do {
+            for (int x = 0 ; x < Width ; ++x)
+                board[x] = new int[Height];
+
+            // Make several random moves so that games will be varied even if
+            // strategies are deterministic.
+            for (int i = 0 ; i < 4 ; ++i)
+                move(random.nextInt(7));
+        } while (isPlayer1Win());
     }
 
     public int width() { return Width; }
@@ -31,6 +44,7 @@ class ConnectFour {
         for (int x = 0 ; x < Width ; ++x)
             t.board[x] = board[x].clone();
         t.turn = turn;
+        t.winner = winner;
         return t;
     }
 
@@ -40,6 +54,30 @@ class ConnectFour {
 
     boolean at(int x, int y, int player) {
         return 0 <= x && x < Width && 0 <= y && y < Height && board[x][y] == player;
+    }
+
+    final int[][] patterns = {
+        { 0, 1, 0, 1, 0 },
+        { 0, 0, 1, 1, 0 },
+        { 0, 1, 1, 0, 0 }
+    };
+
+    boolean match(int x, int[] pattern) {
+        for (int i = 0 ; i < 5 ; ++i) {
+            if (board[x + i][Height - 1] != pattern[i])
+                return false;
+        }
+
+        return true;
+    }
+
+    boolean isPlayer1Win() {
+        for (int x = 0 ; x <= Width - 5 ; ++x)
+            for (int[] pattern : patterns)
+                if (match(x, pattern))
+                    return true;
+
+        return false;
     }
 
     public boolean winningMove(int player, int x, int y, int dir, Point start) {
@@ -92,7 +130,7 @@ class ConnectFour {
                 win_y = start.y;
                 win_dx = dir_x[dir];
                 win_dy = dir_y[dir];
-                winner = turn;
+                winner = player;
                 return;
             }
 

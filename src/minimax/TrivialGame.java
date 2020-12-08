@@ -16,7 +16,7 @@ class TrivialState {
 public class TrivialGame implements HeuristicGame<TrivialState, Integer> {
 
     @Override
-    public TrivialState initialState() { return new TrivialState(0, 0); }
+    public TrivialState initialState(int seed) { return new TrivialState(0, 0); }
 
     @Override
     public TrivialState clone(TrivialState state) {
@@ -54,10 +54,10 @@ public class TrivialGame implements HeuristicGame<TrivialState, Integer> {
     @Override
     public double outcome(TrivialState state) {
         if (state.p1move > state.p2move)
-            return 1.0;
+            return PLAYER_1_WIN;
         if (state.p1move < state.p2move)
-            return 0.0;
-        return 0.5;
+            return PLAYER_2_WIN;
+        return 0.0;
     }
 
     @Override

@@ -27,7 +27,7 @@ public class Runner {
             seed(strat1, seed);
             seed(strat2, seed);
 
-            S s = game.initialState();
+            S s = game.initialState(seed);
             int moves = 0;
 			while (!game.isDone(s)) {
 				A a = game.player(s) == 1 ? strat1.action(s) : strat2.action(s);

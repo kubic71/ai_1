@@ -48,13 +48,14 @@ class View extends JPanel {
 public class UI extends JFrame implements KeyListener, MouseListener {
     private static final long serialVersionUID = 0;
 
-    ConnectFour game = new ConnectFour();
+    ConnectFour game;
     ArrayList<Strategy<ConnectFour, Integer>> players = new ArrayList<>();
 
-    UI() {
+    public UI(ConnectFour game) {
         super("Connect Four");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        this.game = game;
         add(new View(game));
         pack();
         setLocationRelativeTo(null);

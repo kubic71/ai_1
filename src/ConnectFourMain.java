@@ -1,15 +1,29 @@
-package connectfour;
-
 import static java.lang.System.out;
 import java.util.ArrayList;
 
+import connectfour.*;
 import minimax.*;
 
 public class ConnectFourMain {
     static Strategy<ConnectFour, Integer> strategy(String name) {
+        int arg = 0;
+
+        /* String base = null;
+        int i = name.indexOf('/');
+        if (i >= 0) {
+            base = name.substring(i + 1);
+            name = name.substring(0, i);
+        } */
+
+        int i = name.indexOf(':');
+        if (i >= 0) {
+            arg = Integer.parseInt(name.substring(i + 1));
+            name = name.substring(0, i);
+        }
         switch (name) {
             case "basic": return new BasicStrategy();
             case "heuristic": return new HeuristicStrategy();
+            case "minimax": return new Minimax<>(new ConnectFourGame(), arg);
             case "random": return new RandomStrategy<>(new ConnectFourGame());
 
             default: throw new Error("unknown strategy");
@@ -26,6 +40,7 @@ public class ConnectFourMain {
         out.println("available strategies:");
         out.println("  basic");
         out.println("  heuristic");
+        out.println("  minimax[:<depth>]");
         out.println("  random");
         System.exit(0);
     }
@@ -65,7 +80,7 @@ public class ConnectFourMain {
             if (strategies.isEmpty())
                 usage();
 
-            UI ui = new UI();
+            UI ui = new UI(new ConnectFour(seed));
             if (strategies.size() == 1)
                 ui.addHuman();
             for (var s : strategies) {

@@ -14,35 +14,35 @@ import minimax.*;
 public class HeuristicStrategy extends SeededStrategy<ConnectFour, Integer> {
     boolean debug = false;
 
-    // value[n] is the value of having n discs within a span of 4 adjacent
+    // values[n] is the value of having n discs within a span of 4 adjacent
     // positions, if the opponent has no discs in those positions.
-    static final int[] value = { 0, 0, 1, 2, 100 };
+    static final double[] values = { 0, 0.2, 1.0, 3.0, 100 };
 
     static final int[] dir_x = { -1, -1, -1, 0 }, dir_y = { -1, 0, 1, 1 };
 
-    static boolean count(ConnectFour state, int[] a, int x, int y, int dx, int dy) {
+    static boolean count(ConnectFour state, int[] p, int x, int y, int dx, int dy) {
         if (!state.valid(x, y) || !state.valid(x + 3 * dx, y + 3 * dy))
             return false;
 
-        a[0] = a[1] = a[2] = 0;
+        p[0] = p[1] = p[2] = 0;
         for (int i = 0 ; i < 4 ; ++i)
-            a[state.board[x + i * dx][y + i * dy]] += 1;
+            p[state.board[x + i * dx][y + i * dy]] += 1;
         return true;
     }
 
-    static int value(int[] p) {
+    static double value(int[] p) {
         if (p[1] > 0 && p[2] == 0)
-            return value[p[1]];
+            return values[p[1]];
 
         if (p[2] > 0 && p[1] == 0)
-            return - value[p[2]];
+            return - values[p[2]];
 
         return 0;
     }
 
     // Calculate the total heuristic score for a given board state.
     public static double evaluate(ConnectFour state) {
-        int total = 0;
+        double total = 0;
         int[] p = new int[3];
 
         for (int x = 0; x < state.width(); ++x)
@@ -59,7 +59,7 @@ public class HeuristicStrategy extends SeededStrategy<ConnectFour, Integer> {
         int me = game.turn();
         ArrayList<Integer> possible = new ArrayList<>();
         int[] p = new int[3];
-        int bestVal = Integer.MIN_VALUE;
+        double bestVal = Double.NEGATIVE_INFINITY;
         int block = -1;    
         
         for (int x = 0 ; x < game.width() ; ++x) {
@@ -78,7 +78,7 @@ public class HeuristicStrategy extends SeededStrategy<ConnectFour, Integer> {
 
             // Calculate the incremental change in the heuristic score if we
             // play at x.
-            int total = 0;
+            double total = 0;
             for (int dir = 0 ; dir < 4 ; ++dir) {
                 int dx = dir_x[dir], dy = dir_y[dir];
                 for (int i = 0 ; i < 4 ; ++i)
@@ -91,7 +91,7 @@ public class HeuristicStrategy extends SeededStrategy<ConnectFour, Integer> {
             if (debug) {
                 ConnectFour game1 = game.clone();
                 game1.move(x);
-                int total1 = (int) (evaluate(game1) - evaluate(game));
+                double total1 = evaluate(game1) - evaluate(game);
                 if (total != total1) {
                     System.out.printf("total = %d, total1 = %d\n", total, total1);
                     throw new Error("incremental calculation is wrong!");

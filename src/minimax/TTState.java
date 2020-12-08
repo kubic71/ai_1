@@ -97,15 +97,6 @@ public class TTState {
         return (winner() != 0 || countEmpty() == 0);
     }
 
-    public double outcome() {
-        switch (winner()) {
-            case 0: return 0.5;   // draw
-            case 1: return 1.0;
-            case 2: return 0.0;
-            default: throw new Error();
-        }
-    }
-
     char asChar(int i) {
         switch (i) {
         case 0: return '.';
