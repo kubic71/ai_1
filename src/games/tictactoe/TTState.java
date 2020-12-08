@@ -1,4 +1,4 @@
-package minimax;
+package games.tictactoe;
 
 import java.util.ArrayList;
 import java.util.Arrays;

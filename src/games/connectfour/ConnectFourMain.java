@@ -1,13 +1,56 @@
+package games.connectfour;
+
 import static java.lang.System.out;
+
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 
-import connectfour.*;
 import minimax.*;
 
 public class ConnectFourMain {
     static void error(String message) {
         out.println(message);
         System.exit(0);
+    }
+
+    // A hack.  Use reflection to find the Minimax class since it is in the default package
+    // and we are not.
+    @SuppressWarnings("unchecked")
+    static <S, A> Strategy<S, A> newMinimax(AbstractGame<S, A> game, int depth) {
+        try {
+            Class<?> minimaxClass = Class.forName("Minimax");
+            Constructor<?> constructor =
+                minimaxClass.getConstructor(AbstractGame.class, int.class);
+
+            return (Strategy<S, A>) constructor.newInstance(game, depth);
+        } catch (ClassNotFoundException e) {
+            error("can't find Minimax class");
+        } catch (NoSuchMethodException e) {
+            error("can't find Minimax constructor");
+        } catch (ReflectiveOperationException e) {
+            throw new Error(e);
+        }
+        return null;
+    }
+
+    // A hack.  Use reflection to find the Mcts class since it is in the default package
+    // and we are not.
+    @SuppressWarnings("unchecked")
+    static <S, A> Strategy<S, A> newMcts(AbstractGame<S, A> game, Strategy<S, A> base, int limit) {
+        try {
+            Class<?> mctsClass = Class.forName("Mcts");
+            Constructor<?> constructor =
+                mctsClass.getConstructor(AbstractGame.class, Strategy.class, int.class);
+
+            return (Strategy<S, A>) constructor.newInstance(game, base, limit);
+        } catch (ClassNotFoundException e) {
+            error("can't find Mtcs class");
+        } catch (NoSuchMethodException e) {
+            error("can't find Mcts constructor");
+        } catch (ReflectiveOperationException e) {
+            throw new Error(e);
+        }
+        return null;
     }
 
     static Strategy<ConnectFour, Integer> strategy(String name) {
@@ -33,11 +76,11 @@ public class ConnectFourMain {
                     error("must specify number of iterations for mcts");
                 if (base == null)
                     error("must specify base strategy for mcts");
-                return new Mcts<>(new ConnectFourGame(), strategy(base), arg);
+                return newMcts(new ConnectFourGame(), strategy(base), arg);
             case "minimax":
                 if (arg < 0)
                     error("must specify search depth for minimax");
-                return new Minimax<>(new ConnectFourGame(), arg);
+                return newMinimax(new ConnectFourGame(), arg);
             case "random": return new RandomStrategy<>(new ConnectFourGame());
 
             default:

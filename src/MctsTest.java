@@ -1,4 +1,5 @@
 
+import games.tictactoe.*;
 import minimax.*;
 
 public class MctsTest {
@@ -21,8 +22,8 @@ public class MctsTest {
     }
 
     public static boolean testTicTacToe() {
-        return test(new TicTacToe(), new BasicTicTacToeStrategy(), 1000,
-                    500, new BasicTicTacToeStrategy(),
+        return test(new TicTacToe(), new BasicStrategy(), 1000,
+                    500, new BasicStrategy(),
                     true, 0.5, .06);
     }
 

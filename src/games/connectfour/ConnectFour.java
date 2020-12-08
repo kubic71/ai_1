@@ -1,4 +1,4 @@
-package connectfour;
+package games.connectfour;
 
 import java.awt.Point;
 import java.util.Random;

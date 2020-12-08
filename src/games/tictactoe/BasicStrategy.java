@@ -1,6 +1,8 @@
-package minimax;
+package games.tictactoe;
 
-public class BasicTicTacToeStrategy extends SeededStrategy<TTState, Integer> {
+import minimax.SeededStrategy;
+
+public class BasicStrategy extends SeededStrategy<TTState, Integer> {
     public Integer action(TTState s) {
         // win if possible
         for (int i = 0 ; i < 9 ; ++i)

@@ -1,6 +1,8 @@
-package minimax;
+package games.tictactoe;
 
 import java.util.*;
+
+import minimax.HeuristicGame;
 
 public class TicTacToe implements HeuristicGame<TTState, Integer> {
     public TTState initialState(int seed) { return new TTState(); }

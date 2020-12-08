@@ -57,12 +57,11 @@ public class TrivialGame implements HeuristicGame<TrivialState, Integer> {
             return PLAYER_1_WIN;
         if (state.p1move < state.p2move)
             return PLAYER_2_WIN;
-        return 0.0;
+        return DRAW;
     }
 
     @Override
     public double evaluate(TrivialState state) {
-        return 0.5;   // just a guess
+        return DRAW;   // just a guess
     }
-    
 }

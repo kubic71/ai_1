@@ -1,4 +1,4 @@
-package connectfour;
+package games.connectfour;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,7 +11,7 @@ import minimax.*;
 class View extends JPanel {
     private static final long serialVersionUID = 0;
 
-    static final Color[] colors = { Color.WHITE, Color.YELLOW, Color.RED };
+    static final Color[] colors = { Color.WHITE, Color.YELLOW.darker(), Color.RED.darker() };
 
     ConnectFour game;
 
@@ -24,7 +24,7 @@ class View extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.setColor(Color.BLUE);
+        g.setColor(Color.BLUE.darker());
         g.fillRect(50, 50, 700, 600);
 
         int w = game.winner();
