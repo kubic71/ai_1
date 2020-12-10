@@ -1,1 +1,1 @@
-java -cp target/classes games.connectfour.ConnectFourMain %*
+java -cp target/classes minimax.connectfour.ConnectFourMain %*

@@ -1,4 +1,4 @@
-package games.connectfour;
+package minimax.connectfour;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -45,17 +45,23 @@ class View extends JPanel {
     }
 }
 
-public class UI extends JFrame implements KeyListener, MouseListener {
+public class ConnectFourUI extends JFrame
+                           implements UI<ConnectFour, Integer>, KeyListener, MouseListener {
+
     private static final long serialVersionUID = 0;
 
     ConnectFour game;
     ArrayList<Strategy<ConnectFour, Integer>> players = new ArrayList<>();
 
-    public UI(ConnectFour game) {
+    public ConnectFourUI() {
         super("Connect Four");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    }
 
-        this.game = game;
+    @Override
+    public void init(int seed) {
+        this.game = new ConnectFour(seed);
+
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(new View(game));
         pack();
         setLocationRelativeTo(null);
@@ -66,10 +72,12 @@ public class UI extends JFrame implements KeyListener, MouseListener {
         players.add(null);      // player 0 = dummy entry
     }
 
+    @Override
     public void addPlayer(Strategy<ConnectFour, Integer> strategy) {
         players.add(strategy);
     }
 
+    @Override
     public void addHuman() {
         players.add(null);
     }
@@ -94,8 +102,10 @@ public class UI extends JFrame implements KeyListener, MouseListener {
             if (!game.move(x))
                 return;
 
-            if (game.winner() >= 0)
+            if (game.winner() >= 0) {
+                repaint();
                 return;     // human won
+            }
 
             if (currentStrategy() != null)  // computer's turn
                 computerMove();
@@ -138,5 +148,10 @@ public class UI extends JFrame implements KeyListener, MouseListener {
 
     @Override
     public void mouseReleased(MouseEvent arg0) {
+    }
+
+    @Override
+    public void run() {
+        setVisible(true);
     }
 }

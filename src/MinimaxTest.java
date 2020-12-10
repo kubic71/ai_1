@@ -1,6 +1,6 @@
 
-import games.tictactoe.*;
 import minimax.*;
+import minimax.tictactoe.*;
 
 public class MinimaxTest {
     public static <S, A> boolean test(
@@ -20,7 +20,7 @@ public class MinimaxTest {
     }
 
     public static boolean testTicTacToe() {
-        return test(new TicTacToe(), 0, 500, new BasicStrategy(),
+        return test(new TicTacToeGame(), 0, 500, new BasicStrategy(),
                     250, 30);
     }
 

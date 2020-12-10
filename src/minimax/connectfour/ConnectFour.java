@@ -1,4 +1,4 @@
-package games.connectfour;
+package minimax.connectfour;
 
 import java.awt.Point;
 import java.util.Random;

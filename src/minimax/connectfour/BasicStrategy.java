@@ -1,7 +1,8 @@
-package games.connectfour;
+package minimax.connectfour;
 
 import java.util.*;
-import minimax.*;
+
+import minimax.SeededStrategy;
 
 // A basic strategy for Connect Four.
 //

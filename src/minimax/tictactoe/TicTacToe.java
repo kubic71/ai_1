@@ -1,24 +1,21 @@
-package games.tictactoe;
+package minimax.tictactoe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
-public class TTState {
+public class TicTacToe {
     int[] board = new int[9];
     public int player = 1;
 
-    public TTState() { }
-    public TTState(int[] board, int player) {
+    public TicTacToe() { }
+    public TicTacToe(int[] board, int player) {
         this.board = board; this.player = player;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof TTState)) return false;
+        if (!(o instanceof TicTacToe)) return false;
 
-        TTState t = (TTState) o;
+        TicTacToe t = (TicTacToe) o;
         return player == t.player && Arrays.equals(board, t.board);
     }
 
@@ -28,8 +25,8 @@ public class TTState {
     }
 
     @Override
-    public TTState clone() {
-        return new TTState(board.clone(), player);
+    public TicTacToe clone() {
+        return new TicTacToe(board.clone(), player);
     }
 
     List<Integer> actions() {
@@ -69,8 +66,8 @@ public class TTState {
         player = 3 - player;
     }
 
-    TTState result(int action) {
-        TTState s = clone();
+    TicTacToe result(int action) {
+        TicTacToe s = clone();
         s.apply(action);
         return s;
     }
