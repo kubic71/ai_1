@@ -37,12 +37,12 @@ public class Runner {
             if (verbose)
                 System.out.printf("seed %d: ", seed);
 			double o = game.outcome(s);
-			if (o == 0.5) {
+			if (o == AbstractGame.DRAW) {
                 ++wins[0];
                 if (verbose)
                     System.out.print("draw");
             }
-			else if (o > 0.5) {
+			else if (o > AbstractGame.DRAW) {
                 ++wins[1];
                 if (verbose)
                     System.out.printf("%s won", name(strat1));
