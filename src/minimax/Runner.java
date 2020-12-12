@@ -21,7 +21,9 @@ public class Runner {
         System.out.printf("playing %d games: %s (player 1) vs. %s (player 2)\n",
                           count, name(strat1), name(strat2));
 
-		int[] wins = new int[3];
+        int[] wins = new int[3];
+        long[] time = new long[3];
+        int[] totalMoves = new int[3];
 		
 		for (int i = 0 ; i < count ; ++i) {
             int seed = startSeed + i;
@@ -31,9 +33,14 @@ public class Runner {
             S s = game.initialState(seed);
             int moves = 0;
 			while (!game.isDone(s)) {
-				A a = game.player(s) == 1 ? strat1.action(s) : strat2.action(s);
+                int player = game.player(s);
+                long start = System.currentTimeMillis();
+                A a = player == 1 ? strat1.action(s) : strat2.action(s);
+                time[player] += System.currentTimeMillis() - start;
+
                 game.apply(s, a);
                 moves += 1;
+                totalMoves[player] += 1;
 			}
 
             if (verbose)
@@ -64,7 +71,12 @@ public class Runner {
 		if (draws > 0)
 			System.out.format("%d draws (%.1f%%), ", draws, 100.0 * draws / count);
 		
-		System.out.format("%s won %d (%.1f%%)\n", name(strat2), wins[2], 100.0 * wins[2] / count);
+        System.out.format("%s won %d (%.1f%%)\n", name(strat2), wins[2], 100.0 * wins[2] / count);
+        
+        if (verbose)
+            System.out.printf("    %s took %.1f ms/move, %s took %.1f ms/move\n",
+                name(strat1), 1.0 * time[1] / totalMoves[1],
+                name(strat2), 1.0 * time[2] / totalMoves[2]);
 
         return wins;
     }
