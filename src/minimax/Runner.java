@@ -8,9 +8,9 @@ public class Runner {
         return s.contains("@") ? strat.getClass().getSimpleName() : s;
     }
 
-    public static <S, A> void seed(Strategy<S, A> strategy, int seed) {
+    public static <S, A> void seed(Strategy<S, A> strategy, int seed, int player) {
         if (strategy instanceof SeededStrategy) {
-            ((SeededStrategy<S, A>) strategy).setSeed(seed);
+            ((SeededStrategy<S, A>) strategy).setSeed(seed + 1_000_000 * (player - 1));
         }
     }
 
@@ -23,8 +23,8 @@ public class Runner {
 		
 		for (int i = 0 ; i < count ; ++i) {
             int seed = startSeed + i;
-            seed(strat1, seed);
-            seed(strat2, seed);
+            seed(strat1, seed, 1);
+            seed(strat2, seed, 2);
 
             S s = game.initialState(seed);
             int moves = 0;

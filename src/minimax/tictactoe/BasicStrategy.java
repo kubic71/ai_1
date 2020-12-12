@@ -2,6 +2,11 @@ package minimax.tictactoe;
 
 import minimax.SeededStrategy;
 
+// A basic strategy for Tic-Tac-Toe.
+//
+// If any move will win, play it.  Otherwise, if any move will block an opponent's
+// immediate win, play it.  Otherwise, play a random move.
+
 public class BasicStrategy extends SeededStrategy<TicTacToe, Integer> {
     public Integer action(TicTacToe s) {
         // win if possible

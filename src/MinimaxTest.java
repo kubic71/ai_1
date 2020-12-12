@@ -1,6 +1,7 @@
 
 import minimax.*;
 import minimax.tictactoe.*;
+import minimax.trivial.TrivialGame;
 
 public class MinimaxTest {
     public static <S, A> boolean test(

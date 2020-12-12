@@ -74,11 +74,16 @@ public class GameMain<S, A> {
                     error("must specify number of iterations for mcts");
                 if (base == null)
                     error("must specify base strategy for mcts");
-                return newMcts(game, strategy(base, game, extraStrategies), arg);
+                Strategy<S, A> baseStrategy = strategy(base, game, extraStrategies);
+                if (baseStrategy instanceof SeededStrategy)
+                    ((SeededStrategy<S, A>) baseStrategy).setSeed(0);  // make base deterministic
+                return newMcts(game, baseStrategy, arg);
+
             case "minimax":
                 if (arg < 0)
                     error("must specify search depth for minimax");
                 return newMinimax(game, arg);
+
             case "random": return new RandomStrategy<>(game);
 
             default:
@@ -146,14 +151,16 @@ public class GameMain<S, A> {
                 usage(program, extraStrategies);
 
             if (ui == null) {
-                out.println("no UI available");
+                out.println("no UI available for this game");
                 return;
             }
             ui.init(seed);
             if (strategies.size() == 1)
                 ui.addHuman();
-            for (var s : strategies) {
-                Runner.seed(s, seed);
+            for (int p = 1 ; p <= strategies.size() ; ++p) {
+                var s = strategies.get(p - 1);
+                if (seed >= 0)
+                    Runner.seed(s, seed, p);
                 ui.addPlayer(s);
             }
 
