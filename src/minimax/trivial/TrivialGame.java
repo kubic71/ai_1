@@ -4,15 +4,6 @@ import java.util.List;
 
 import minimax.*;
 
-class TrivialState {
-    int p1move, p2move;
-
-    TrivialState(int p1move, int p2move) {
-        this.p1move = p1move;
-        this.p2move = p2move;
-    }
-}
-
 class PerfectStrategy implements Strategy<TrivialState, Integer> {
     @Override
     public Integer action(TrivialState state) {

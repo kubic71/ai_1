@@ -75,8 +75,6 @@ public class GameMain<S, A> {
                 if (base == null)
                     error("must specify base strategy for mcts");
                 Strategy<S, A> baseStrategy = strategy(base, game, extraStrategies);
-                if (baseStrategy instanceof SeededStrategy)
-                    ((SeededStrategy<S, A>) baseStrategy).setSeed(0);  // make base deterministic
                 return newMcts(game, baseStrategy, arg);
 
             case "minimax":
@@ -159,8 +157,7 @@ public class GameMain<S, A> {
                 ui.addHuman();
             for (int p = 1 ; p <= strategies.size() ; ++p) {
                 var s = strategies.get(p - 1);
-                if (seed >= 0)
-                    Runner.seed(s, seed, p);
+                Runner.seed(s, seed, p);
                 ui.addPlayer(s);
             }
 

@@ -10,7 +10,9 @@ public class Runner {
 
     public static <S, A> void seed(Strategy<S, A> strategy, int seed, int player) {
         if (strategy instanceof SeededStrategy) {
-            ((SeededStrategy<S, A>) strategy).setSeed(seed + 1_000_000 * (player - 1));
+            if (seed >= 0 && player == 2)
+                seed += 1_000_000;
+            ((SeededStrategy<S, A>) strategy).setSeed(seed);
         }
     }
 
