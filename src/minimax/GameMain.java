@@ -110,7 +110,7 @@ public class GameMain<S, A> {
             out.printf("  %s\n", s.name);
         out.println("  random");
         out.println("  minimax:<depth>");
-        out.println("  mcts:<depth>/<base-strategy>");
+        out.println("  mcts:<iterations>/<base-strategy>");
         System.exit(0);
     }
     
