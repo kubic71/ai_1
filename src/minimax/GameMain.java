@@ -87,7 +87,10 @@ public class GameMain<S, A> {
             default:
                 for (NamedStrategy<S, A> s : extraStrategies)
                     if (s.name.equals(name))
-                        return s.strategy;
+                        // We retrieve a new instance of the strategy here so that e.g.
+                        // there will be separate strategy objects when a strategy plays
+                        // against itself.
+                        return s.strategy.get();
 
                 error("unknown strategy");
                 return null;

@@ -103,17 +103,4 @@ public class Runner {
 
         return wins;
     }
-
-    public static boolean report(int[][] wins, int minWin1, int minWin2) {
-        if (wins[1][1] < minWin1) {
-            System.out.printf("FAILURE: should win at least %d games as player 1\n", minWin1);
-            return false;
-        }
-        if (wins[2][2] < minWin2) {
-            System.out.printf("FAILURE: should win at least %d games as player 2\n", minWin2);
-            return false;
-        }
-        System.out.println("PASSED");
-        return true;
-    }
 }
