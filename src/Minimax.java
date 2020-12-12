@@ -1,7 +1,7 @@
 
 import minimax.*;
 
-class Minimax<S, A> implements Strategy<S, A> {
+public class Minimax<S, A> implements Strategy<S, A> {
 
   public Minimax(HeuristicGame<S, A> game, int limit) {
   

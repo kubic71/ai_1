@@ -9,13 +9,16 @@ public class TicTacToeGame implements HeuristicGame<TicTacToe, Integer> {
 
     public TicTacToe clone(TicTacToe state) { return state.clone(); }
 
-    public int player(TicTacToe state) { return state.player; }
+    public int player(TicTacToe state) { return state.turn; }
 
     public List<Integer> actions(TicTacToe state) { return state.actions(); }
 
-    public void apply(TicTacToe state, Integer action) { state.apply(action); }
+    public void apply(TicTacToe state, Integer action) {
+        if (!state.move(action))
+            throw new Error("illegal move");
+    }
 
-    public boolean isDone(TicTacToe state) { return state.isDone(); }
+    public boolean isDone(TicTacToe state) { return state.winner() >= 0; }
 
     public double outcome(TicTacToe state) {
         switch (state.winner()) {

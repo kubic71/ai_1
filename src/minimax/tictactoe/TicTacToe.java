@@ -3,96 +3,97 @@ package minimax.tictactoe;
 import java.util.*;
 
 public class TicTacToe {
-    int[] board = new int[9];
-    public int player = 1;
+    int[][] board = new int[3][];
+    int moves = 0;
+    public int turn = 1;
 
-    public TicTacToe() { }
-    public TicTacToe(int[] board, int player) {
-        this.board = board; this.player = player;
+    int winner = -1;
+    int win_x, win_y, win_dx, win_dy;
+
+    public TicTacToe(int[][] b) {
+        for (int i = 0 ; i < 3 ; ++i)
+            board[i] = b == null ? new int[3] : b[i].clone();
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof TicTacToe)) return false;
-
-        TicTacToe t = (TicTacToe) o;
-        return player == t.player && Arrays.equals(board, t.board);
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(board) + player;
+    public TicTacToe() {
+        this(null);
     }
 
     @Override
     public TicTacToe clone() {
-        return new TicTacToe(board.clone(), player);
+        TicTacToe t = new TicTacToe(board);
+
+        t.turn = turn;
+        t.moves = moves;
+        t.winner = winner;
+
+        return t;
     }
 
     List<Integer> actions() {
         List<Integer> r = new ArrayList<Integer>();
-        if (!isDone())
-            for (int i = 0 ; i < 9 ; ++i)
-                if (board[i] == 0)
-                    r.add(i);
+
+        if (winner == -1)
+            for (int x = 0 ; x < 3 ; ++x)
+                for (int y = 0 ; y < 3 ; ++y)
+                    if (board[x][y] == 0)
+                        r.add(x + 3 * y);
+
         return r;
     }
 
-    int countEmpty() {
-        int count = 0;
-        for (int i = 0 ; i < 9 ; ++i)
-            if (board[i] == 0)
-                ++count;
-
-        return count;
-    }
-
     int randomAction(Random random) {
-        int m = random.nextInt(countEmpty());
-        int i = -1;
-        for (int j = 0 ; j <= m ; ++j)
-            do {
-                i += 1;
-            } while (board[i] != 0);
-
-        return i;
-    }
-
-    void apply(int action) {
-        if (board[action] != 0 || isDone())
-            throw new Error("illegal move");
-
-        board[action] = player;
-        player = 3 - player;
+        List<Integer> a = actions();
+        return a.get(random.nextInt(a.size()));
     }
 
     TicTacToe result(int action) {
         TicTacToe s = clone();
-        s.apply(action);
+        s.move(action);
         return s;
     }
 
-    int winner(int s, int d) {
-        int w = board[s];
+    boolean win(int x, int y, int dx, int dy) {
+        if (board[x][y] > 0 &&
+            board[x][y] == board[x + dx][y + dy] &&
+            board[x][y] == board[x + 2 * dx][y + 2 * dy]) {
 
-        return board[s + d] == w && board[s + 2 * d] == w ? w : 0;
+            winner = board[x][y];
+            win_x = x; win_y = y;
+            win_dx = dx; win_dy = dy;
+            return true;
+        } else return false;
     }
 
-    static int[] check =   { 0, 1, 2, 0, 3, 6, 0, 2 };
-    static int[] check_d = { 3, 3, 3, 1, 1, 1, 4, 2 };
+    void checkWin() {
+        for (int i = 0 ; i < 3 ; ++i)
+            if (win(i, 0, 0, 1) || win(0, i, 1, 0))
+                return; 
 
-    public int winner() {
-        for (int i = 0 ; i < check.length ; ++i) {
-            int w = winner(check[i], check_d[i]);
-            if (w > 0)
-                return w;
+        if (win(0, 0, 1, 1) || win(0, 2, 1, -1))
+            return;
+
+        if (moves == 9)
+            winner = 0;
         }
-        return 0;
+
+    boolean move(int x, int y) {
+        if (winner >= 0 || x < 0 || x >= 3 || y < 0 || y >= 3 || board[x][y] != 0)
+            return false;
+
+        board[x][y] = turn;
+        moves += 1;
+        checkWin();
+
+        turn = 3 - turn;
+        return true;
     }
 
-    public boolean isDone() {
-        return (winner() != 0 || countEmpty() == 0);
+    boolean move(int action) {
+        return move(action % 3, action / 3);
     }
+
+    public int winner() { return winner; }
 
     char asChar(int i) {
         switch (i) {
@@ -106,9 +107,9 @@ public class TicTacToe {
     public String toString() {
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0 ; i < 3 ; ++i) {
-            for (int j = 0 ; j < 3 ; ++j)
-                sb.append(String.format("%c ", asChar(board[3 * i + j])));
+        for (int x = 0 ; x < 3 ; ++x) {
+            for (int y = 0 ; y < 3 ; ++y)
+                sb.append(String.format("%c ", asChar(board[x][y])));
             sb.append("\n");
         }
 

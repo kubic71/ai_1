@@ -9,18 +9,22 @@ import minimax.SeededStrategy;
 
 public class BasicStrategy extends SeededStrategy<TicTacToe, Integer> {
     public Integer action(TicTacToe s) {
-        // win if possible
-        for (int i = 0 ; i < 9 ; ++i)
-            if (s.board[i] == 0 && s.result(i).isDone())
-                return i;
+        TicTacToe t = s.clone();
 
-        // block a win if possible
-        TicTacToe t = new TicTacToe(s.board, 3 - s.player);  // assume other player's turn
-        for (int i = 0 ; i < 9 ; ++i)
-            if (t.board[i] == 0 && t.result(i).isDone())
-                return i;
+        for (int check = 0 ; check < 2 ; ++check) {
+            int player = check == 0 ? t.turn : 3 - t.turn;
 
-        // move randomly
+            for (int x = 0 ; x < 3 ; ++x)
+                for (int y = 0 ; y < 3 ; ++y)
+                    if (t.board[x][y] == 0) {
+                        t.board[x][y] = player;
+                        t.checkWin();
+                        if (t.winner() == player)
+                            return x + 3 * y;
+                        t.board[x][y] = 0;
+                    }
+        }
+
         return s.randomAction(random);
     }
 }

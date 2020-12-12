@@ -10,6 +10,6 @@ public class TicTacToeMain {
         strategies.add(new NamedStrategy<>("basic", new BasicStrategy()));
         
         new GameMain<TicTacToe, Integer>().main("tictactoe", new TicTacToeGame(),
-           null, strategies, args);
+           new TicTacToeUI(), strategies, args);
     }
 }
