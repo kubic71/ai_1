@@ -2,6 +2,7 @@ package minimax.connectfour;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.*;
 import java.util.ArrayList;
 
 import javax.swing.*;
@@ -14,18 +15,42 @@ class View extends JPanel {
     static final Color[] colors = { Color.WHITE, Color.YELLOW.darker(), Color.RED.darker() };
 
     ConnectFour game;
+    Area grid;
+    int lastMove;
 
     public View(ConnectFour game) {
         this.game = game;
 
         setPreferredSize(new Dimension(800, 700));
+
+        grid = new Area(new Rectangle(50, 50, 700, 600));
+        for (int x = 0 ; x < game.width() ; ++x)
+            for (int y = 0 ; y < game.height() ; ++y) {
+                Ellipse2D c = new Ellipse2D.Double(50 + 100 * x + 10, 50 + 100 * y + 10, 80, 80);
+                grid.subtract(new Area(c));
+            }
+    }
+
+    void circle(Graphics2D g, int x, int y, int width, int height, int thickness) {
+        Stroke save = g.getStroke();
+        g.setStroke(new BasicStroke(thickness));
+        g.drawOval(x, y, width, height);
+        g.setStroke(save);
     }
 
     @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+    protected void paintComponent(Graphics g1) {
+        super.paintComponent(g1);
+        Graphics2D g = (Graphics2D) g1;
+
+        for (int x = 0; x < game.width(); ++x)
+            for (int y = 0; y < game.height(); ++y) {
+                g.setColor(colors[game.at(x, y)]);
+                g.fillOval(50 + 100 * x + 10, 50 + 100 * y + 10, 80, 80);
+            }
+
         g.setColor(Color.BLUE.darker());
-        g.fillRect(50, 50, 700, 600);
+        g.fill(grid);
 
         int w = game.winner();
         if (w >= 1) {
@@ -33,15 +58,17 @@ class View extends JPanel {
             for (int i = 0 ; i < 4 ; ++i) {
                 int x = game.win_x + i * game.win_dx;
                 int y = game.win_y + i * game.win_dy;
-                g.fillOval(50 + 100 * x, 50 + 100 * y, 100, 100);
+                circle(g, 50 + 100 * x + 10, 50 + 100 * y + 10, 80, 80, 5);
             }
+        } else if (game.lastMove >= 0) {
+            int x = game.lastMove;
+            int y = 0;
+            while (game.board[x][y] == 0)
+                y += 1;
+            g.setColor(Color.CYAN);
+            circle(g, 50 + 100 * x + 10, 50 + 100 * y + 10, 80, 80, 3);
         }
 
-        for (int x = 0; x < game.width(); ++x)
-            for (int y = 0; y < game.height(); ++y) {
-                g.setColor(colors[game.at(x, y)]);
-                g.fillOval(50 + 100 * x + 10, 50 + 100 * y + 10, 80, 80);
-            }
     }
 }
 

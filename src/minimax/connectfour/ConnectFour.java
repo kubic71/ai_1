@@ -8,6 +8,7 @@ public class ConnectFour {
 
     int[][] board = new int[7][];     // board[x][y] is disc at (x, y)
     int turn = 1;
+    int lastMove;
     int winner = -1;
     int win_x, win_y, win_dx, win_dy;
 
@@ -26,6 +27,8 @@ public class ConnectFour {
             for (int i = 0 ; i < 4 ; ++i)
                 move(random.nextInt(7));
         } while (isPlayer1Win());
+
+        lastMove = -1;
     }
 
     public int width() { return Width; }
@@ -45,6 +48,7 @@ public class ConnectFour {
             t.board[x] = board[x].clone();
         t.turn = turn;
         t.winner = winner;
+        t.lastMove = lastMove;
         return t;
     }
 
@@ -158,6 +162,7 @@ public class ConnectFour {
             return false;
 
         board[x][y] = turn;
+        lastMove = x;
         checkWin(turn, x, y);
 
         turn = 3 - turn;
