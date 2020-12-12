@@ -78,15 +78,16 @@ public class ConnectFourUI extends JFrame
     private static final long serialVersionUID = 0;
 
     ConnectFour game;
-    ArrayList<Strategy<ConnectFour, Integer>> players = new ArrayList<>();
+    ArrayList<Strategy<ConnectFour, Integer>> players;
 
     public ConnectFourUI() {
         super("Connect Four");
     }
 
     @Override
-    public void init(int seed) {
+    public void init(int seed, ArrayList<Strategy<ConnectFour, Integer>> players) {
         this.game = new ConnectFour(seed);
+        this.players = players;
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         add(new View(game));
@@ -95,18 +96,6 @@ public class ConnectFourUI extends JFrame
 
         addKeyListener(this);
         addMouseListener(this);
-
-        players.add(null);      // player 0 = dummy entry
-    }
-
-    @Override
-    public void addPlayer(Strategy<ConnectFour, Integer> strategy) {
-        players.add(strategy);
-    }
-
-    @Override
-    public void addHuman() {
-        players.add(null);
     }
 
     Strategy<ConnectFour, Integer> currentStrategy() {

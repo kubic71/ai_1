@@ -116,6 +116,8 @@ public class GameMain<S, A> {
         List<NamedStrategy<S, A>> extraStrategies, String[] args) {
 
         ArrayList<Strategy<S, A>> strategies = new ArrayList<>();
+        strategies.add(null);   // dummy entry
+
         int games = 0;
         int seed = -1;
         boolean verbose = false;
@@ -139,10 +141,14 @@ public class GameMain<S, A> {
                 strategies.add(strategy(args[i], game, extraStrategies));
         }
 
+        int players = strategies.size() - 1;
+        if (players == 0)
+            usage(program, extraStrategies);
+
         if (games > 0) {
-            if (strategies.size() != 2)
+            if (players != 2)
                 error("must specify 2 strategies with -sim");
-            Runner.play(game, strategies.get(0), strategies.get(1),
+            Runner.play(game, strategies.get(1), strategies.get(2),
                         games, seed >= 0 ? seed : 0, verbose);
         } else {
             if (strategies.isEmpty())
@@ -152,14 +158,16 @@ public class GameMain<S, A> {
                 out.println("no UI available for this game");
                 return;
             }
-            ui.init(seed);
-            if (strategies.size() == 1)
-                ui.addHuman();
-            for (int p = 1 ; p <= strategies.size() ; ++p) {
-                var s = strategies.get(p - 1);
-                Runner.seed(s, seed, p);
-                ui.addPlayer(s);
+
+            if (players == 1)
+                strategies.add(0, null);  // add human player
+
+            for (int p = 1 ; p < strategies.size() ; ++p) {
+                var s = strategies.get(p);
+                if (s != null)
+                    Runner.seed(s, seed, p);
             }
+            ui.init(seed, strategies);
 
             ui.run();
         }

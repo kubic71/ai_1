@@ -10,6 +10,6 @@ public class TrivialMain {
         strategies.add(new NamedStrategy<>("perfect", new PerfectStrategy()));
         
         new GameMain<TrivialState, Integer>().main("trivial", new TrivialGame(),
-           null, strategies, args);
+           new TrivialUI(), strategies, args);
     }
 }
