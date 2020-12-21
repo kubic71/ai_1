@@ -78,7 +78,7 @@ class SolverTest {
 
     // Generate a random CSP that can be solved by forward checking.
     BooleanCSP randomForwardProb(int size) {
-        Random random = new Random();
+        Random random = new Random(0);
 
         ArrayList<Integer> varMap = new ArrayList<Integer>();
         for (int v = 0 ; v < size ; ++v)
@@ -120,7 +120,7 @@ class SolverTest {
 
     // Generate a random CSP that is satisfiable.
     BooleanCSP randomSatisfiable(int size) {
-        Random random = new Random();
+        Random random = new Random(0);
 
         int[] vals = new int[size];
         for (int v = 0 ; v < size ; ++v)
