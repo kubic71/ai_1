@@ -20,14 +20,16 @@ class SolverTest {
         System.exit(0);
     }
 
-    // Problems that are solvable by forward checking.
+    // Some small problems that are solvable by forward checking.
     String[] easy = { 
         "1 var: 1 of {0}",
         "1 var: 0 of {0}",
         "3 vars: 1 of {0}, 1 of {1}, 0 of {2}",
         "4 vars: 1 of {0 1}, 1 of {1 2}, 1 of {2 3}, 0 of {3}",
         "4 vars: 2 of {0 1 2 3}, 0 of {0 3}",
-        "5 vars: 2 of {0 1 2 3 4}, 2 of {1 4}"
+        "5 vars: 2 of {0 1 2 3 4}, 2 of {1 4}",
+        "8 vars: 1 of {0 1 3 4}, 2 of {0 1 2 4 5 6 7}, 2 of {1 5}",
+        "8 vars: 3 of {0 2 3 4 5 7}, 2 of {1 3 6 7}, 3 of {3 4 7}"
     };
 
     // These problems can't be solved by forward checking, but they are all satisfiable,
@@ -59,7 +61,90 @@ class SolverTest {
                  "/ 5=F, 6=T, 8=T, 9=F"
     };
 
-    String[][] lists = { easy, harder };
+    // More problems where some inferences are possible.
+    String[] extra = {
+        "8 vars: 1 of {0 1}, 2 of {0 1 2}, 1 of {1 2 3}, 3 of {2 3 4 5 6}, " +
+                "2 of {5 6 7}, 1 of {6 7} / 0=T, 1=F, 2=T, 3=F, 5=T",
+
+        "8 vars: 1 of {0 1}, 1 of {0 1 2}, 1 of {1 2 3}, 1 of {2 3 4 5 6}, " +
+                "2 of {5 6 7}, 1 of {6 7} / 0=F, 1=T, 2=F, 3=F, 4=F, 5=T, 6=F, 7=T",
+
+        "8 vars: 1 of {0 1}, 2 of {0 1 2}, 2 of {1 2 3 4 5}, 1 of {4 5 6}, " +
+                "1 of {5 6 7} / 2=T",
+
+        "7 vars: 1 of {0 1}, 1 of {0 1 2}, 1 of {1 2 3}, 1 of {2 3 4 5 6}, " +
+                "1 of {5 6} / 0=F, 1=T, 2=F, 3=F, 4=F"
+    };
+
+    // Generate a random CSP that can be solved by forward checking.
+    BooleanCSP randomForwardProb(int size) {
+        Random random = new Random();
+
+        ArrayList<Integer> varMap = new ArrayList<Integer>();
+        for (int v = 0 ; v < size ; ++v)
+            varMap.add(v);
+        Collections.shuffle(varMap);
+
+        ArrayList<Integer> vals = new ArrayList<Integer>();
+
+        BooleanCSP csp = new BooleanCSP(size);
+        int n = 0;
+        while (n < size) {
+            int prev = Math.min(n, 1 + random.nextInt(4));
+            int newVars = Math.min(size - n, 1 + random.nextInt(4));
+            
+            int sum = 0;
+            ArrayList<Integer> cvars = new ArrayList<Integer>();
+            while (cvars.size() < prev) {
+                int i = random.nextInt(prev);
+                if (!cvars.contains(varMap.get(i))) {
+                    cvars.add(varMap.get(i));
+                    sum += vals.get(i);
+                }
+            }
+
+            int val = sum == 0 ? 1 : sum == prev ? 0 : random.nextInt(2);
+            for (int i = 0 ; i < newVars ; ++i) {
+                cvars.add(varMap.get(n + i));
+                vals.add(val);
+                sum += val;
+            }
+
+            Collections.sort(cvars);
+            csp.addConstraint(new Constraint(sum, cvars));
+            n += newVars;
+        }
+
+        return csp;
+    }
+
+    // Generate a random CSP that is satisfiable.
+    BooleanCSP randomSatisfiable(int size) {
+        Random random = new Random();
+
+        int[] vals = new int[size];
+        for (int v = 0 ; v < size ; ++v)
+            vals[v] = random.nextInt(2);
+        
+        BooleanCSP csp = new BooleanCSP(size);
+        for (int i = 0 ; i < 2 * size / 3; ++i) {
+            int count = 2 + random.nextInt(4);
+            ArrayList<Integer> vars = new ArrayList<Integer>();
+
+            int sum = 0;
+            while (vars.size() < count) {
+                int v = random.nextInt(size);
+                if (!vars.contains(v)) {
+                    vars.add(v);
+                    sum += vals[v];
+                }
+            }
+
+            csp.addConstraint(new Constraint(sum, vars));
+        }
+
+        return csp;
+    }
 
     BooleanCSP parse(String s, List<Assignment> inferences) {
         String[] top = s.split("/");
@@ -102,6 +187,11 @@ class SolverTest {
         for (int v = 0 ; v < csp.numVars ; ++v) {
             if (v > 0)
                 System.out.print(", ");
+            if (v == 100) {
+                System.out.print("...");
+                break;
+            }
+
             Boolean b = csp.value[v];
             String s = b == null ? "X" : b ? "T" : "F";
             System.out.printf("%d = %s", v, s);
@@ -109,10 +199,12 @@ class SolverTest {
         System.out.println();
     }
 
-    void checkSolved(BooleanCSP csp) {
+    boolean checkSolved(BooleanCSP csp) {
         for (int v = 0 ; v < csp.numVars ; ++v)
-            if (csp.value[v] == null && !csp.constraints(v).isEmpty())
-                fail("no value for var " + v);
+            if (csp.value[v] == null && !csp.constraints(v).isEmpty()) {
+                out.println("no value for var " + v);
+                return false;
+            }
         
         for (Constraint c : csp.constraints) {
             int count = 0;
@@ -120,53 +212,96 @@ class SolverTest {
                 if (csp.value[v])
                     count += 1;
             
-            if (count != c.count)
-                fail("constraint not satisfied");
+            if (count != c.count) {
+                out.println("constraint not satisfied");
+                return false;
+            }
         }
+
+        return true;
     }
 
-    void test_forward() {
-        out.println("testing forward checking");
+    boolean test_forward(BooleanCSP csp) {
+        List<Integer> found = solver.forwardCheck(csp);
+        if (found == null) {
+            out.println("failed to find a solution");
+            return false;
+        }
+        print(csp);
+        if (found.size() != csp.numVars) {
+            out.println("failed to solve all variables");
+            return false;
+        }
+        return checkSolved(csp);
+    }
 
+    boolean test_forward_easy() {
+        out.println("testing forward checking");
         for (String p : easy) {
             out.println(p);
-            BooleanCSP csp = parse(p, null);
-            List<Integer> found = solver.forwardCheck(csp);
-            if (found == null)
-                fail("failed to find a solution");
-            print(csp);
-            if (found.size() != csp.numVars)
-                fail("failed to solve all variables");
-            checkSolved(csp);
+            if (!test_forward(parse(p, null)))
+                return false;
         }
+        return true;
     }
 
-    void test_solve() {
+    boolean test_forward_random() {
+        out.println("testing forward checking on random problems");
+        for (int size = 10 ; size <= 100 ; size += 10) {
+            BooleanCSP csp = randomForwardProb(size);
+            if (!test_forward(csp))
+                return false;
+        }
+        return true;
+    }
+
+    boolean test_solve(BooleanCSP csp) {
+        List<Integer> found = solver.solve(csp);
+        if (found == null) {
+            out.println("failed to find a solution");
+            return false;
+        }
+        print(csp);
+        return checkSolved(csp);
+    }
+
+    boolean test_solve_fixed() {
         out.println("\ntesting solver");
 
+        String[][] lists = { easy, harder };
         for (String[] list : lists)
             for (String p : list) {
                 out.println(p);
-                BooleanCSP csp = parse(p, null);
-                List<Integer> found = solver.solve(csp);
-                if (found == null)
-                    fail("failed to find a solution");
-                print(csp);
-                checkSolved(csp);
+                if (!test_solve(parse(p, null)))
+                    return false;
             }
+        
+        return true;
     }
 
-    void test_infer() {
-        out.println("\ntesting inference");
+    boolean test_solve_random() {
+        out.println("testing solver on random problems");
+        for (int size = 100 ; size <= 1000 ; size += 100) {
+            BooleanCSP csp = randomSatisfiable(size);
+            if (!test_solve(csp))
+                return false;
+        }
+        return true;
+    }
 
-        for (String p : harder) {
+    boolean test_infer(String[] probs) {
+        for (String p : probs) {
             out.println(p);
 
             ArrayList<Assignment> expected = new ArrayList<Assignment>();
             BooleanCSP csp = parse(p, expected);
+
+            // Repeatedly call forwardCheck() and inferVar() to infer as much as possible.
             while (true) {
-                if (solver.forwardCheck(csp) == null)
-                    fail("forward inference failed");
+                if (solver.forwardCheck(csp) == null) {
+                    out.println("forward inference failed");
+                    return false;
+                }
                 if (solver.inferVar(csp) == -1)
                     break;
             }
@@ -176,7 +311,7 @@ class SolverTest {
                 Boolean b = null;
                 for (Constraint c : csp.constraints(v))
                     if (c.count == 0) {
-                        b = false;
+                        b = false;  // all variables in this constraint must be false
                         break;
                     }
                 if (b == null)
@@ -186,21 +321,37 @@ class SolverTest {
                             break;
                         }
                 Boolean c = csp.value[v];
-                if (b == null && c != null)
-                    fail("should not have inferrred value for var " + v);
-                else if (b != null && c == null)
-                    fail("should have inferred value for var " + v);
-                else if (b != c)
-                    fail("inferred wrong value for var " + v);
+                if (b == null && c != null) {
+                    out.println("should not have inferrred value for var " + v);
+                    return false;
+                } else if (b != null && c == null) {
+                    out.println("should have inferred value for var " + v);
+                    return false;
+                } else if (b != c) {
+                    out.println("inferred wrong value for var " + v);
+                    return false;
+                }
             }
         }
+
+        return true;
+    }
+
+    boolean test_infer_fixed() {
+        out.println("\ntesting inference");
+        return test_infer(harder);
+    }
+
+    boolean test_infer_extra() {
+        out.println("\ntesting inference (extra)");
+        return test_infer(extra);
     }
 
     void run() {
-        test_forward();
-        test_solve();
-        test_infer();
-        out.println("all tests passed");
+        if (test_forward_easy() && test_forward_random() &&
+            test_solve_fixed() && test_solve_random() &&
+            test_infer_fixed() && test_infer_extra())
+            out.println("all tests passed");
     }
 
     public static void main(String[] args) {
