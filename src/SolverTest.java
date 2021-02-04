@@ -122,13 +122,15 @@ class SolverTest {
     BooleanCSP randomSatisfiable(int size) {
         Random random = new Random(0);
 
-        int[] vals = new int[size];
+        Boolean[] vals = new Boolean[size];
         for (int v = 0 ; v < size ; ++v)
-            vals[v] = random.nextInt(2);
+            vals[v] = random.nextInt(2) == 1;
+        out.print("actual values: ");
+        printValues(vals);
         
         BooleanCSP csp = new BooleanCSP(size);
         for (int i = 0 ; i < 2 * size / 3; ++i) {
-            int count = 2 + random.nextInt(4);
+            int count = Math.min(2 + random.nextInt(4), size);
             ArrayList<Integer> vars = new ArrayList<Integer>();
 
             int sum = 0;
@@ -136,13 +138,14 @@ class SolverTest {
                 int v = random.nextInt(size);
                 if (!vars.contains(v)) {
                     vars.add(v);
-                    sum += vals[v];
+                    sum += vals[v] ? 1 : 0;
                 }
             }
 
             csp.addConstraint(new Constraint(sum, vars));
         }
 
+        System.out.println(csp);
         return csp;
     }
 
@@ -183,8 +186,8 @@ class SolverTest {
         return csp;
     }
 
-    void print(BooleanCSP csp) {
-        for (int v = 0 ; v < csp.numVars ; ++v) {
+    void printValues(Boolean[] a) {
+        for (int v = 0 ; v < a.length ; ++v) {
             if (v > 0)
                 System.out.print(", ");
             if (v == 100) {
@@ -192,7 +195,7 @@ class SolverTest {
                 break;
             }
 
-            Boolean b = csp.value[v];
+            Boolean b = a[v];
             String s = b == null ? "X" : b ? "T" : "F";
             System.out.printf("%d = %s", v, s);
         }
@@ -227,7 +230,7 @@ class SolverTest {
             out.println("failed to find a solution");
             return false;
         }
-        print(csp);
+        printValues(csp.value);
         if (found.size() != csp.numVars) {
             out.println("failed to solve all variables");
             return false;
@@ -261,7 +264,9 @@ class SolverTest {
             out.println("failed to find a solution");
             return false;
         }
-        print(csp);
+        System.out.printf("found solution: ");
+        printValues(csp.value);
+        System.out.println();
         return checkSolved(csp);
     }
 
@@ -305,7 +310,7 @@ class SolverTest {
                 if (solver.inferVar(csp) == -1)
                     break;
             }
-            print(csp);
+            printValues(csp.value);
 
             for (int v = 0 ; v < csp.numVars ; ++v) {
                 Boolean b = null;

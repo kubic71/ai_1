@@ -45,4 +45,12 @@ public class BooleanCSP {
         for (int v : vars)
             value[v] = null;
     }
+
+    @Override
+    public String toString() {
+        ArrayList<String> a = new ArrayList<String>();
+        for (Constraint c : constraints)
+            a.add(c.toString());
+        return numVars + " vars: " + String.join(", ", a);
+    }
 }
